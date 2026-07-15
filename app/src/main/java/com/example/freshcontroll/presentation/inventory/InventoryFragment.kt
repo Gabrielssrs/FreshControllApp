@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.example.freshcontroll.R
 import com.example.freshcontroll.databinding.FragmentInventoryBinding
 import com.example.freshcontroll.presentation.inventory.adapter.ProductAdapter
 // TODO: Importar ProductAdapter cuando lo crees
@@ -53,13 +54,16 @@ class InventoryFragment : Fragment() {
     }
 
     private fun setupListeners() {
+        // 1. AÑADIR ESTA LÓGICA PARA LA FLECHA DE RETROCESO
+        binding.btnBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
         // Botón principal flotante para añadir producto (funciona para lista y estado vacío)
         binding.btnAddProduct.setOnClickListener {
             val action = InventoryFragmentDirections.actionInventoryToRegisterProduct()
             findNavController().navigate(action)
         }
-
-        // SE ELIMINÓ binding.btnEmptyStateAdd porque no existe en el XML
 
         // CORRECCIÓN: etSearchProducts en lugar de etSearch
         binding.etSearchProducts.addTextChangedListener(object : TextWatcher {
@@ -77,6 +81,10 @@ class InventoryFragment : Fragment() {
                 launch {
                     viewModel.products.collect { productList ->
                         productAdapter.submitList(productList)
+
+                        // 2. AÑADIR ESTAS DOS LÍNEAS PARA EL CONTADOR DE ARTÍCULOS
+                        val count = productList.size
+                        binding.tvItemsCount.text = getString(R.string.mostrando_articulos_placeholder, count)
                     }
                 }
 

@@ -121,9 +121,9 @@
 
         <!-- Acción para ir a registrar un producto nuevo autocompletado -->
         <action
-            android:id="@+id/action_barcodeScanner_to_registerProduct"
-            app:destination="@id/registerProductFragment"
-            app:popUpTo="@id/registerProductFragment"
+            android:id="@+id/action_barcodeScanner_to_newSale"
+            app:destination="@id/newSaleFragment"
+            app:popUpTo="@id/newSaleFragment"
             app:popUpToInclusive="true" />
 
         <!-- Acción para ir a ajustar el stock de un producto que ya existe localmente -->
@@ -174,9 +174,15 @@
         android:name="com.example.freshcontroll.presentation.sales.SaleReceiptFragment"
         android:label="Comprobante de Venta"
         tools:layout="@layout/fragment_sale_receipt">
+
         <argument
             android:name="saleId"
             app:argType="string" />
+
+        <action
+            android:id="@+id/action_saleReceipt_to_newSale"
+            app:destination="@id/newSaleFragment"
+            app:popUpTo="@id/homeFragment" />
     </fragment>
 
     <fragment
