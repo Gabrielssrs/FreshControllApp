@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "822851570130",
+    "project_id": "freshcontrol-2ff59",
+    "storage_bucket": "freshcontrol-2ff59.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822851570130:android:661b973df3fecfba73e00b",
+        "android_client_info": {
+          "package_name": "com.example.freshcontroll"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTSjwG4K0h9vdu8SEu9nDyASfAiLso1DQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

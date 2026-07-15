@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://tools.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_header"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:background="@color/blanco"
+        android:elevation="2dp"
+        android:paddingHorizontal="12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/atras"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/verde_primario"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_header_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/detalle_producto_titulo"
+            android:textColor="@color/verde_primario"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_back"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsv_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/layout_header"
+        app:layout_constraintBottom_toTopOf="@id/layout_actions_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="16dp">
+
+            <ImageView
+                android:id="@+id/iv_product_hero_image"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/descripcion_imagen_producto"
+                tools:srcCompat="@android:drawable/ic_menu_gallery" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_main_info_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/blanco"
+                app:strokeColor="@color/borde_tarjeta"
+                app:strokeWidth="1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/tv_product_category"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/morado_acento"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textAllCaps="true"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        tools:text="VERDURAS FRESCAS" />
+
+                    <TextView
+                        android:id="@+id/tv_product_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@id/tv_product_category"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        tools:text="Tomate Perita" />
+
+                    <TextView
+                        android:id="@+id/tv_product_sku"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/texto_secundario"
+                        android:textSize="16sp"
+                        app:layout_constraintTop_toBottomOf="@id/tv_product_name"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        tools:text="SKU: TOM-PER-001" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cv_stock_badge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="@color/verde_pago_aprobado_fondo"
+                        app:strokeWidth="0dp"
+                        app:layout_constraintTop_toBottomOf="@id/tv_product_sku"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="6dp">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_check_circle"
+                                app:tint="@color/verde_pago_aprobado"
+                                android:contentDescription="@null" />
+
+                            <TextView
+                                android:id="@+id/tv_stock_current_amount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:textColor="@color/verde_pago_aprobado"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                tools:text="Stock Actual: 150 kg" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/tv_stock_status_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/texto_secundario"
+                        android:textSize="16sp"
+                        app:layout_constraintTop_toBottomOf="@id/cv_stock_badge"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        tools:text="Nivel óptimo" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_sale_price_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/blanco"
+                app:strokeColor="@color/borde_tarjeta"
+                app:strokeWidth="1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/tv_sale_price_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/precio_venta_label"
+                        android:textColor="@color/texto_secundario"
+                        android:textSize="16sp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/cv_sale_price_icon_bg" />
+
+                    <TextView
+                        android:id="@+id/tv_sale_price_value"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@id/tv_sale_price_label"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/cv_sale_price_icon_bg"
+                        tools:text="$ 450.00 / kg" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cv_sale_price_icon_bg"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        app:cardCornerRadius="22dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="@color/gris_fondo_icono"
+                        app:strokeWidth="0dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_tag"
+                            app:tint="@color/verde_primario"
+                            android:contentDescription="@null" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_cost_price_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/blanco"
+                app:strokeColor="@color/borde_tarjeta"
+                app:strokeWidth="1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/tv_cost_price_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/precio_costo_label"
+                        android:textColor="@color/texto_secundario"
+                        android:textSize="16sp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/cv_cost_price_icon_bg" />
+
+                    <TextView
+                        android:id="@+id/tv_cost_price_value"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@id/tv_cost_price_label"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/cv_cost_price_icon_bg"
+                        tools:text="$ 300.00 / kg" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cv_cost_price_icon_bg"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        app:cardCornerRadius="22dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="@color/gris_fondo_icono"
+                        app:strokeWidth="0dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_attach_money"
+                            app:tint="@color/morado_acento"
+                            android:contentDescription="@null" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_expiration_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/blanco"
+                app:strokeColor="@color/borde_tarjeta"
+                app:strokeWidth="1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_expiration_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_calendar"
+                        app:tint="@color/texto_principal"
+                        android:contentDescription="@null"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_expiration_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="@string/fecha_vencimiento_estimada_label"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="@id/iv_expiration_icon"
+                        app:layout_constraintStart_toEndOf="@id/iv_expiration_icon"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_expiration_date_value"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@id/tv_expiration_label"
+                        app:layout_constraintStart_toStartOf="@id/iv_expiration_icon"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        tools:text="15 de Noviembre, 2023" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_history_master_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/blanco"
+                app:strokeColor="@color/borde_tarjeta"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:background="@color/gris_fondo_icono">
+
+                        <ImageView
+                            android:id="@+id/iv_history_header_icon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_history"
+                            app:tint="@color/verde_primario"
+                            android:contentDescription="@null"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_history_header_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="@string/historial_movimientos_titulo"
+                            android:textColor="@color/texto_principal"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintTop_toTopOf="@id/iv_history_header_icon"
+                            app:layout_constraintStart_toEndOf="@id/iv_history_header_icon"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_movements_history"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/item_product_movement" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/layout_actions_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@color/blanco"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_edit_product"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:text="@string/boton_editar"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            app:backgroundTint="@color/verde_primario"
+            app:icon="@drawable/ic_edit"
+            app:iconGravity="textStart"
+            app:cornerRadius="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_adjust_stock"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:minHeight="48dp"
+            android:text="@string/boton_ajustar_stock"
+            android:textColor="@color/morado_acento"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            app:strokeColor="@color/morado_acento"
+            app:strokeWidth="1.5dp"
+            app:icon="@drawable/ic_tune"
+            app:iconTint="@color/morado_acento"
+            app:iconGravity="textStart"
+            app:cornerRadius="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_delete_product"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:minHeight="48dp"
+            android:text="@string/boton_eliminar"
+            android:textColor="@color/error"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            app:backgroundTint="@color/rojo_fondo_alerta"
+            app:icon="@drawable/ic_delete"
+            app:iconTint="@color/error"
+            app:iconGravity="textStart"
+            app:cornerRadius="8dp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

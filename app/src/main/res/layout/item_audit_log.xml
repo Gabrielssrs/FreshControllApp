@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://tools.android.com/tools"
+    android:id="@+id/cv_audit_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@color/blanco"
+    app:strokeColor="@color/borde_tarjeta"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_audit_icon_bg"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            app:cardCornerRadius="22dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/gris_fondo_icono"
+            app:strokeWidth="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_audit_icon"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/descripcion_icono_evento"
+                tools:src="@drawable/ic_edit"
+                app:tint="@color/error" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/tv_audit_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/texto_secundario"
+            android:textSize="15sp"
+            android:gravity="end"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Hoy, 14:30" />
+
+        <TextView
+            android:id="@+id/tv_audit_log_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="12dp"
+            android:textColor="@color/texto_principal"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cv_audit_icon_bg"
+            app:layout_constraintEnd_toStartOf="@id/tv_audit_timestamp"
+            tools:text="Venta #FC-9824 editada" />
+
+        <TextView
+            android:id="@+id/tv_audit_responsible"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/texto_secundario"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_audit_log_title"
+            app:layout_constraintStart_toStartOf="@id/tv_audit_log_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Hecho por: Ana" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_view_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:minHeight="48dp"
+            android:text="@string/ver_detalle"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            app:backgroundTint="@color/verde_primario"
+            app:cornerRadius="8dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_audit_responsible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="@string/ver_detalle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

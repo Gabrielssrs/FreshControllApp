@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="verde_primario">#2E7D32</color>
+    <color name="morado_acento">#6A4C93</color>
+    <color name="fondo">#FAFAFA</color>
+    <color name="texto_secundario">#757575</color>
+    <color name="blanco">#FFFFFF</color>
+    <color name="texto_principal">#212121</color>
+    <color name="error">#D32F2F</color>
+    <color name="exito">#66BB6A</color>
+    <color name="rojo_fondo_alerta">#FFEBEE</color>
+    <color name="verde_fondo_suave">#E8F5E9</color>
+    <color name="morado_fondo_suave">#F3E5F5</color>
+    <color name="borde_tarjeta">#E0E0E0</color>
+    <color name="gris_contenedor_logo">#EAEAEA</color>
+    <color name="verde_pago_aprobado">#1B5E20</color>
+    <color name="verde_pago_aprobado_fondo">#E8F5E9</color>
+    <color name="gris_fondo_icono">#F5F5F5</color>
+    <color name="morado_fondo_avatar">#E1BEE7</color>
+    <color name="naranja_alerta">#E65100</color>
+    <color name="naranja_alerta_fondo">#FFF3E0</color>
+    <color name="naranja_alerta_icono_bg">#FFE0B2</color>
+    <color name="rojo_oscuro_icono">#B71C1C</color>
+    <color name="verde_escaner">#00E676</color>
+    <color name="rojo_escaner">#FF1744</color>
+    <color name="fondo_oscuro_semitransparente">#66000000</color> ```
+
+</resources>

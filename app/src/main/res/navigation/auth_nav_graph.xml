@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/auth_nav_graph"
+    app:startDestination="@id/welcomeFragment">
+
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.example.freshcontroll.presentation.auth.WelcomeFragment"
+        android:label="Bienvenida"
+        tools:layout="@layout/fragment_welcome">
+        <action
+            android:id="@+id/action_welcome_to_login"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_welcome_to_register"
+            app:destination="@id/registerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.freshcontroll.presentation.auth.LoginFragment"
+        android:label="Iniciar Sesión"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_to_main"
+            app:destination="@id/main_nav_graph"
+            app:popUpTo="@id/auth_nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_login_to_forgotPassword"
+            app:destination="@id/forgotPasswordFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.freshcontroll.presentation.auth.RegisterFragment"
+        android:label="Registro"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_register_to_success"
+            app:destination="@id/registerSuccessFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerSuccessFragment"
+        android:name="com.example.freshcontroll.presentation.auth.RegisterSuccessFragment"
+        android:label="Registro Exitoso"
+        tools:layout="@layout/fragment_register_success">
+        <action
+            android:id="@+id/action_success_to_main"
+            app:destination="@id/main_nav_graph"
+            app:popUpTo="@id/auth_nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="com.example.freshcontroll.presentation.auth.ForgotPasswordFragment"
+        android:label="Recuperar Contraseña"
+        tools:layout="@layout/fragment_forgot_password" />
+
+</navigation>

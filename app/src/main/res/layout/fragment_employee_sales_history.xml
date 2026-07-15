@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://tools.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo">
+
+    <!-- Header / Top Bar -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_header"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:background="@color/blanco"
+        android:elevation="2dp"
+        android:paddingHorizontal="12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/btn_menu"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/menu"
+            android:src="@drawable/btn_menu"
+            app:tint="@color/verde_primario"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mis_ventas_titulo"
+            android:textColor="@color/verde_primario"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/siv_header_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/perfil"
+            android:scaleType="centerCrop"
+            app:strokeColor="@color/borde_tarjeta"
+            app:strokeWidth="1dp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+            tools:srcCompat="@android:drawable/sym_def_app_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Scroll principal para el contenido -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsv_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/layout_header"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="24dp">
+
+            <!-- Tarjeta Resumen del Empleado -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_employee_summary_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/blanco"
+                app:strokeColor="@color/borde_tarjeta"
+                app:strokeWidth="1dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/tv_my_total_day_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mi_total_del_dia"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_my_total_day_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/verde_primario"
+                        android:textSize="32sp"
+                        android:textStyle="bold"
+                        tools:text="$1,250.00" />
+
+                    <TextView
+                        android:id="@+id/tv_sales_performed_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/ventas_realizadas"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_sales_performed_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        tools:text="45" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_new_sale"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:minHeight="48dp"
+                        android:text="@string/nueva_venta"
+                        android:textSize="18sp"
+                        android:textAllCaps="false"
+                        app:backgroundTint="@color/verde_primario"
+                        app:icon="@drawable/btn_nueva_venta"
+                        app:iconGravity="textStart"
+                        app:cornerRadius="12dp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Título del Historial -->
+            <TextView
+                android:id="@+id/tv_today_history_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:layout_marginHorizontal="16dp"
+                android:text="@string/historial_de_hoy"
+                android:textColor="@color/texto_principal"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/cv_employee_summary_card"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- RecyclerView de Ventas del Día -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_employee_sales"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="16dp"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/tv_today_history_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_employee_sale" />
+
+            <!-- Botón Cargar Más Ventas -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_load_more_sales"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:minHeight="48dp"
+                android:text="@string/cargar_mas_ventas"
+                android:textColor="@color/texto_principal"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                app:strokeColor="@color/borde_tarjeta"
+                app:strokeWidth="1.5dp"
+                app:cornerRadius="12dp"
+                app:layout_constraintTop_toBottomOf="@id/rv_employee_sales"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

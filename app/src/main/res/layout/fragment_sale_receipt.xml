@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://tools.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/fondo">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="24dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_header"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:background="#FFFFFF"
+            android:elevation="2dp"
+            android:paddingHorizontal="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageButton
+                android:id="@+id/btn_menu"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/menu"
+                android:src="@drawable/btn_menu"
+                app:tint="@color/verde_primario"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_header_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/nombre_app"
+                android:textColor="@color/verde_primario"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_menu" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_header_profile_avatar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_header_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/perfil"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@android:drawable/sym_def_app_icon" />
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_receipt_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="16dp"
+            android:text="@string/resumen_venta"
+            android:textColor="@color/texto_principal"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/layout_header"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_ticket_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginHorizontal="16dp"
+            android:textColor="@color/texto_secundario"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_receipt_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Ticket #FC-9824" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_total_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:strokeColor="@color/borde_tarjeta"
+            app:strokeWidth="1dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_ticket_number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/tv_total_cobrado_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total_cobrado"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_total_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/verde_primario"
+                    android:textSize="36sp"
+                    android:textStyle="bold"
+                    tools:text="$142.50" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_status_badge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/verde_pago_aprobado_fondo"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:paddingHorizontal="14dp"
+                        android:paddingVertical="6dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_check_circle"
+                            app:tint="@color/verde_pago_aprobado" />
+
+                        <TextView
+                            android:id="@+id/tv_status_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="@string/pago_aclarado"
+                            android:textColor="@color/verde_pago_aprobado"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            tools:text="@string/pago_aprobado" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_confirm_sale"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="16dp"
+            android:minHeight="48dp"
+            android:text="@string/nueva_venta"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            app:backgroundTint="@color/verde_primario"
+            app:icon="@drawable/ic_shopping_cart"
+            app:cornerRadius="8dp"
+            app:layout_constraintTop_toBottomOf="@id/cv_total_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_view_receipt"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="16dp"
+            android:minHeight="48dp"
+            android:text="@string/ver_recibo"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:textColor="@color/morado_acento"
+            app:strokeColor="@color/morado_acento"
+            app:strokeWidth="1dp"
+            app:icon="@drawable/ic_receipt_long"
+            app:iconTint="@color/morado_acento"
+            app:cornerRadius="8dp"
+            app:layout_constraintTop_toBottomOf="@id/btn_confirm_sale"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_sold_items_section"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginHorizontal="16dp"
+            android:textColor="@color/texto_principal"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/btn_view_receipt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Artículos Vendidos (4)" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_products"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="16dp"
+            android:nestedScrollingEnabled="false"
+            app:layout_constraintTop_toBottomOf="@id/tv_sold_items_section"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_sold_product" />
+
+        <View
+            android:id="@+id/view_breakdown_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="16dp"
+            android:background="@color/borde_tarjeta"
+            app:layout_constraintTop_toBottomOf="@id/rv_products"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_subtotal_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:text="@string/subtotal_label"
+            android:textColor="@color/texto_secundario"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/view_breakdown_divider"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_subtotal_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/texto_secundario"
+            android:textSize="18sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_subtotal_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="$142.50" />
+
+        <TextView
+            android:id="@+id/tv_taxes_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="16dp"
+            android:text="@string/impuestos_label"
+            android:textColor="@color/texto_secundario"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_subtotal_label"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_taxes_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/texto_secundario"
+            android:textSize="18sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_taxes_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="$0.00" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

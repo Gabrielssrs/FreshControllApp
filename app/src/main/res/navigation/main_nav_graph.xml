@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://tools.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/homeFragment">
+
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.freshcontroll.presentation.home.HomeFragment"
+        android:label="Inicio"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_notifications"
+            app:destination="@id/notificationsFragment" />
+        <action
+            android:id="@+id/action_home_to_newSale"
+            app:destination="@id/newSaleFragment" />
+        <action
+            android:id="@+id/action_home_to_registerProduct"
+            app:destination="@id/registerProductFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/inventoryFragment"
+        android:name="com.example.freshcontroll.presentation.inventory.InventoryFragment"
+        android:label="Inventario"
+        tools:layout="@layout/fragment_inventory">
+        <action
+            android:id="@+id/action_inventory_to_registerProduct"
+            app:destination="@id/registerProductFragment" />
+        <action
+            android:id="@+id/action_inventory_to_productDetail"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.example.freshcontroll.presentation.inventory.ProductDetailFragment"
+        android:label="Detalle de Producto"
+        tools:layout="@layout/fragment_product_detail">
+        <argument
+            android:name="productId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_productDetail_to_adjustStock"
+            app:destination="@id/adjustStockFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/adjustStockFragment"
+        android:name="com.example.freshcontroll.presentation.inventory.AdjustStockFragment"
+        android:label="Ajustar Stock"
+        tools:layout="@layout/fragment_adjust_stock">
+        <argument
+            android:name="productId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.example.freshcontroll.presentation.home.NotificationsFragment"
+        android:label="Notificaciones"
+        tools:layout="@layout/fragment_notifications">
+        <action
+            android:id="@+id/action_notifications_to_productDetail"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
+
+    <!-- ... otros fragmentos ... -->
+
+    <fragment
+        android:id="@+id/registerProductFragment"
+        android:name="com.example.freshcontroll.presentation.inventory.RegisterProductFragment"
+        android:label="Registrar Producto"
+        tools:layout="@layout/fragment_register_product">
+        <action
+            android:id="@+id/action_registerProduct_to_barcodeScanner"
+            app:destination="@id/barcodeScannerFragment" />
+        <action
+            android:id="@+id/action_registerProduct_to_inventory"
+            app:destination="@id/inventoryFragment"
+            app:popUpTo="@id/inventoryFragment"
+            app:popUpToInclusive="true" />
+
+        <!-- Argumentos opcionales para el autocompletado híbrido -->
+        <argument
+            android:name="barcode"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="prefilledName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="prefilledCategory"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="prefilledImageUrl"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/barcodeScannerFragment"
+        android:name="com.example.freshcontroll.presentation.inventory.BarcodeScannerFragment"
+        android:label="Escanear Código"
+        tools:layout="@layout/fragment_barcode_scanner">
+
+        <!-- Argumento para distinguir el flujo de origen -->
+        <argument
+            android:name="caller"
+            app:argType="string"
+            android:defaultValue="inventory" />
+
+        <!-- Acción para ir a registrar un producto nuevo autocompletado -->
+        <action
+            android:id="@+id/action_barcodeScanner_to_registerProduct"
+            app:destination="@id/registerProductFragment"
+            app:popUpTo="@id/registerProductFragment"
+            app:popUpToInclusive="true" />
+
+        <!-- Acción para ir a ajustar el stock de un producto que ya existe localmente -->
+        <action
+            android:id="@+id/action_barcodeScanner_to_adjustStock"
+            app:destination="@id/adjustStockFragment"
+            app:popUpTo="@id/barcodeScannerFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- ... otros fragmentos ... -->
+
+    <fragment
+        android:id="@+id/salesHistoryFragment"
+        android:name="com.example.freshcontroll.presentation.sales.SalesHistoryFragment"
+        android:label="Ventas"
+        tools:layout="@layout/fragment_sales_history">
+        <action
+            android:id="@+id/action_salesHistory_to_saleReceipt"
+            app:destination="@id/saleReceiptFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/employeeSalesHistoryFragment"
+        android:name="com.example.freshcontroll.presentation.sales.EmployeeSalesHistoryFragment"
+        android:label="Mis Ventas"
+        tools:layout="@layout/fragment_employee_sales_history">
+        <action
+            android:id="@+id/action_employeeSalesHistory_to_saleReceipt"
+            app:destination="@id/saleReceiptFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newSaleFragment"
+        android:name="com.example.freshcontroll.presentation.sales.NewSaleFragment"
+        android:label="Nueva Venta"
+        tools:layout="@layout/fragment_new_sale">
+        <action
+            android:id="@+id/action_newSale_to_barcodeScanner"
+            app:destination="@id/barcodeScannerFragment" />
+        <action
+            android:id="@+id/action_newSale_to_saleReceipt"
+            app:destination="@id/saleReceiptFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/saleReceiptFragment"
+        android:name="com.example.freshcontroll.presentation.sales.SaleReceiptFragment"
+        android:label="Comprobante de Venta"
+        tools:layout="@layout/fragment_sale_receipt">
+        <argument
+            android:name="saleId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.freshcontroll.presentation.profile.ProfileFragment"
+        android:label="Perfil"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profile_to_editProfile"
+            app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_profile_to_employeeManagement"
+            app:destination="@id/employeeManagementFragment" />
+        <action
+            android:id="@+id/action_profile_to_cashRegisterClose"
+            app:destination="@id/cashRegisterCloseFragment" />
+        <action
+            android:id="@+id/action_profile_to_audit"
+            app:destination="@id/auditFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.freshcontroll.presentation.profile.EditProfileFragment"
+        android:label="Editar Perfil"
+        tools:layout="@layout/fragment_edit_profile" />
+
+    <fragment
+        android:id="@+id/employeeManagementFragment"
+        android:name="com.example.freshcontroll.presentation.profile.EmployeeManagementFragment"
+        android:label="Gestión de Empleados"
+        tools:layout="@layout/fragment_employee_management">
+        <action
+            android:id="@+id/action_employeeManagement_to_addEmployee"
+            app:destination="@id/addEmployeeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addEmployeeFragment"
+        android:name="com.example.freshcontroll.presentation.profile.AddEmployeeFragment"
+        android:label="Agregar Empleado"
+        tools:layout="@layout/fragment_add_employee" />
+
+    <fragment
+        android:id="@+id/cashRegisterCloseFragment"
+        android:name="com.example.freshcontroll.presentation.profile.CashRegisterCloseFragment"
+        android:label="Cierre de Caja"
+        tools:layout="@layout/fragment_cash_register_close" />
+
+    <fragment
+        android:id="@+id/auditFragment"
+        android:name="com.example.freshcontroll.presentation.profile.AuditFragment"
+        android:label="Auditoría de Cambios"
+        tools:layout="@layout/fragment_audit">
+        <action
+            android:id="@+id/action_audit_to_auditDetail"
+            app:destination="@id/auditDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/auditDetailFragment"
+        android:name="com.example.freshcontroll.presentation.profile.AuditDetailFragment"
+        android:label="Detalle de Auditoría"
+        tools:layout="@layout/fragment_audit_detail">
+        <argument
+            android:name="logId"
+            app:argType="string" />
+    </fragment>
+
+</navigation>

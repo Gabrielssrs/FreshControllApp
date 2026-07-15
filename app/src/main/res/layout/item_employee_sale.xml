@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://tools.android.com/tools"
+    android:id="@+id/cv_employee_sale_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@color/blanco"
+    app:strokeColor="@color/borde_tarjeta"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:foreground="?attr/selectableItemBackground">
+
+        <!-- Contenedor Gris de la Hora -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_time_container"
+            android:layout_width="72dp"
+            android:layout_height="48dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/gris_fondo_icono"
+            app:strokeWidth="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tv_sale_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/texto_principal"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="14:30" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Número de Venta / Ticket -->
+        <TextView
+            android:id="@+id/tv_sale_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textColor="@color/texto_principal"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cv_time_container"
+            app:layout_constraintEnd_toStartOf="@id/tv_sale_amount"
+            tools:text="Venta #045" />
+
+        <!-- Contenedor Horizontal para Badges (Completada / Editada) -->
+        <LinearLayout
+            android:id="@+id/layout_badges_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/tv_sale_number"
+            app:layout_constraintStart_toStartOf="@id/tv_sale_number"
+            app:layout_constraintEnd_toStartOf="@id/tv_sale_amount">
+
+            <!-- Badge Verde: Completada -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_completed_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/verde_pago_aprobado_fondo"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp">
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="9dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_check_circle"
+                        app:tint="@color/verde_pago_aprobado" />
+
+                    <TextView
+                        android:id="@+id/tv_completed_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="@string/badge_completada"
+                        android:textColor="@color/verde_pago_aprobado"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Badge Gris: Editada (Opcional, se muestra solo cuando corresponde) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_edited_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:visibility="gone"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/gris_fondo_icono"
+                app:strokeWidth="0dp"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp">
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/ic_edit"
+                        app:tint="@color/texto_secundario"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tv_edited_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="@string/badge_editada_simple"
+                        android:textColor="@color/texto_secundario"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+        <!-- Monto total de la venta -->
+        <TextView
+            android:id="@+id/tv_sale_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/texto_principal"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_arrow_next"
+            tools:text="$125.50" />
+
+        <!-- Flecha de navegación a la derecha -->
+        <ImageView
+            android:id="@+id/iv_arrow_next"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_fecha_right"
+            app:tint="@color/borde_tarjeta"
+            android:contentDescription="@string/descripcion_flecha_navegacion"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

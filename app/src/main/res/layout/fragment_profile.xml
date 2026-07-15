@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://tools.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/fondo">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="32dp">
+
+        <!-- HEADER -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_header"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:background="@color/blanco"
+            android:elevation="2dp"
+            android:paddingHorizontal="12dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageButton
+                android:id="@+id/btn_menu"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/menu"
+                android:src="@drawable/btn_menu"
+                app:tint="@color/verde_primario"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_header_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nombre_app"
+                android:textColor="@color/verde_primario"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/siv_header_avatar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@string/perfil"
+                android:scaleType="centerCrop"
+                app:strokeColor="@color/borde_tarjeta"
+                app:strokeWidth="1dp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                tools:srcCompat="@android:drawable/sym_def_app_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- FOTO DE PERFIL -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_profile_picture_container"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintTop_toBottomOf="@id/layout_header"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/siv_large_profile_picture"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:strokeColor="@color/blanco"
+                app:strokeWidth="4dp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                tools:srcCompat="@android:drawable/sym_def_app_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_edit_photo"
+                style="@style/Widget.Material3.Button.IconButton.Filled"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:insetLeft="0dp"
+                android:insetRight="0dp"
+                android:contentDescription="@string/descripcion_editar_foto"
+                app:backgroundTint="@color/verde_primario"
+                app:icon="@drawable/ic_edit"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconSize="40dp"
+                app:strokeColor="@color/blanco"
+                app:strokeWidth="3dp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- INFO USUARIO -->
+        <TextView
+            android:id="@+id/tv_business_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="24dp"
+            android:textColor="@color/texto_principal"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/layout_profile_picture_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Minimarket Don Pepe" />
+
+        <TextView
+            android:id="@+id/tv_user_role"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginHorizontal="24dp"
+            android:textColor="@color/texto_secundario"
+            android:textSize="18sp"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/tv_business_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Administrador Principal" />
+
+        <!-- 1. TARJETA: DATOS DEL NEGOCIO -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_option_business_data"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginHorizontal="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/blanco"
+            app:strokeColor="@color/borde_tarjeta"
+            app:strokeWidth="1dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_user_role"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:foreground="?attr/selectableItemBackground">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_business_icon_bg"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/gris_fondo_icono"
+                    app:strokeWidth="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_business_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_store"
+                        app:tint="@color/verde_primario"
+                        android:contentDescription="@null" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/tv_business_data_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/perfil_datos_negocio_titulo"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/cv_business_icon_bg"
+                    app:layout_constraintEnd_toStartOf="@id/iv_arrow_business" />
+
+                <TextView
+                    android:id="@+id/tv_business_data_desc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/perfil_datos_negocio_desc"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_business_data_title"
+                    app:layout_constraintStart_toStartOf="@id/tv_business_data_title"
+                    app:layout_constraintEnd_toStartOf="@id/iv_arrow_business" />
+
+                <ImageView
+                    android:id="@+id/iv_arrow_business"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="@color/borde_tarjeta"
+                    android:contentDescription="@null"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 2. TARJETA: SEGURIDAD -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_option_security"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/blanco"
+            app:strokeColor="@color/borde_tarjeta"
+            app:strokeWidth="1dp"
+            app:layout_constraintTop_toBottomOf="@id/cv_option_business_data"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:foreground="?attr/selectableItemBackground">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_security_icon_bg"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/gris_fondo_icono"
+                    app:strokeWidth="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_security_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_shield"
+                        app:tint="@color/verde_primario"
+                        android:contentDescription="@null" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/tv_security_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/perfil_seguridad_titulo"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/cv_security_icon_bg"
+                    app:layout_constraintEnd_toStartOf="@id/iv_arrow_security" />
+
+                <TextView
+                    android:id="@+id/tv_security_desc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/perfil_seguridad_desc"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_security_title"
+                    app:layout_constraintStart_toStartOf="@id/tv_security_title"
+                    app:layout_constraintEnd_toStartOf="@id/iv_arrow_security" />
+
+                <ImageView
+                    android:id="@+id/iv_arrow_security"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="@color/borde_tarjeta"
+                    android:contentDescription="@null"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 3. TARJETA: AYUDA -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_option_help"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/blanco"
+            app:strokeColor="@color/borde_tarjeta"
+            app:strokeWidth="1dp"
+            app:layout_constraintTop_toBottomOf="@id/cv_option_security"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:foreground="?attr/selectableItemBackground">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_help_icon_bg"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/gris_fondo_icono"
+                    app:strokeWidth="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_help_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_help_outline"
+                        app:tint="@color/verde_primario"
+                        android:contentDescription="@null" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/tv_help_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/perfil_ayuda_titulo"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/cv_help_icon_bg"
+                    app:layout_constraintEnd_toStartOf="@id/iv_arrow_help" />
+
+                <TextView
+                    android:id="@+id/tv_help_desc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/perfil_ayuda_desc"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_help_title"
+                    app:layout_constraintStart_toStartOf="@id/tv_help_title"
+                    app:layout_constraintEnd_toStartOf="@id/iv_arrow_help" />
+
+                <ImageView
+                    android:id="@+id/iv_arrow_help"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="@color/borde_tarjeta"
+                    android:contentDescription="@null"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 4. TARJETA: GESTIÓN DE EMPLEADOS (Solo Dueño) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_employee_management"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="16dp"
+            android:visibility="gone"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/blanco"
+            app:strokeColor="@color/borde_tarjeta"
+            app:strokeWidth="1dp"
+            app:layout_constraintTop_toBottomOf="@id/cv_option_help"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:foreground="?attr/selectableItemBackground">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_employee_icon_bg"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/gris_fondo_icono"
+                    app:strokeWidth="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_employee_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_group"
+                        app:tint="@color/verde_primario"
+                        android:contentDescription="@null" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/tv_employee_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Gestión de Empleados"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/cv_employee_icon_bg"
+                    app:layout_constraintEnd_toStartOf="@id/iv_arrow_employee" />
+
+                <TextView
+                    android:id="@+id/tv_employee_desc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Administrar accesos del personal"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_employee_title"
+                    app:layout_constraintStart_toStartOf="@id/tv_employee_title"
+                    app:layout_constraintEnd_toStartOf="@id/iv_arrow_employee" />
+
+                <ImageView
+                    android:id="@+id/iv_arrow_employee"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="@color/borde_tarjeta"
+                    android:contentDescription="@null"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 5. TARJETA: AUDITORÍA (Solo Dueño) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_audit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="16dp"
+            android:visibility="gone"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/blanco"
+            app:strokeColor="@color/borde_tarjeta"
+            app:strokeWidth="1dp"
+            app:layout_constraintTop_toBottomOf="@id/cv_employee_management"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:foreground="?attr/selectableItemBackground">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_audit_icon_bg"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/gris_fondo_icono"
+                    app:strokeWidth="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_audit_icon_profile"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_check_circle"
+                        app:tint="@color/verde_primario"
+                        android:contentDescription="@null" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/tv_audit_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Auditoría"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/cv_audit_icon_bg"
+                    app:layout_constraintEnd_toStartOf="@id/iv_arrow_audit" />
+
+                <TextView
+                    android:id="@+id/tv_audit_desc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Historial de cambios y ediciones"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_audit_title"
+                    app:layout_constraintStart_toStartOf="@id/tv_audit_title"
+                    app:layout_constraintEnd_toStartOf="@id/iv_arrow_audit" />
+
+                <ImageView
+                    android:id="@+id/iv_arrow_audit"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="@color/borde_tarjeta"
+                    android:contentDescription="@null"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 6. TARJETA: CIERRE DE CAJA (Solo Dueño) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_cash_register_close"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="16dp"
+            android:visibility="gone"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/blanco"
+            app:strokeColor="@color/borde_tarjeta"
+            app:strokeWidth="1dp"
+            app:layout_constraintTop_toBottomOf="@id/cv_audit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:foreground="?attr/selectableItemBackground">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_cash_icon_bg"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/gris_fondo_icono"
+                    app:strokeWidth="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_cash_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/iv_ventas_icon"
+                        app:tint="@color/verde_primario"
+                        android:contentDescription="@null" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/tv_cash_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Cierre de Caja"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/cv_cash_icon_bg"
+                    app:layout_constraintEnd_toStartOf="@id/iv_arrow_cash" />
+
+                <TextView
+                    android:id="@+id/tv_cash_desc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Registrar cuadre diario"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_cash_title"
+                    app:layout_constraintStart_toStartOf="@id/tv_cash_title"
+                    app:layout_constraintEnd_toStartOf="@id/iv_arrow_cash" />
+
+                <ImageView
+                    android:id="@+id/iv_arrow_cash"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="@color/borde_tarjeta"
+                    android:contentDescription="@null"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- BOTÓN CERRAR SESIÓN -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_logout"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginHorizontal="16dp"
+            android:minHeight="48dp"
+            android:text="@string/cerrar_sesion"
+            android:textColor="@color/error"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            app:strokeColor="@color/error"
+            app:strokeWidth="2dp"
+            app:icon="@drawable/ic_login"
+            app:iconTint="@color/error"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:cornerRadius="12dp"
+            app:layout_constraintTop_toBottomOf="@id/cv_cash_register_close"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

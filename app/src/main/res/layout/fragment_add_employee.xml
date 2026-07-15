@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://tools.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/fondo">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="32dp">
+
+        <!-- Header Bar -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_header"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_marginHorizontal="-16dp"
+            android:background="@color/blanco"
+            android:elevation="2dp"
+            android:paddingHorizontal="12dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/atras"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/verde_primario"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_header_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:text="@string/agregar_empleado_titulo"
+                android:textColor="@color/verde_primario"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:lineSpacingMultiplier="1.1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_back"
+                app:layout_constraintEnd_toStartOf="@id/siv_header_avatar" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/siv_header_avatar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="4dp"
+                android:contentDescription="@string/perfil"
+                android:scaleType="centerCrop"
+                app:strokeColor="@color/borde_tarjeta"
+                app:strokeWidth="1dp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                tools:srcCompat="@drawable/ic_profile_placeholder"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Tarjeta 1: Detalles del Empleado -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_employee_details"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/blanco"
+            app:strokeColor="@color/borde_tarjeta"
+            app:strokeWidth="1dp"
+            app:layout_constraintTop_toBottomOf="@id/layout_header"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tv_details_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/detalles_empleado_titulo"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <!-- Campo Nombre Completo -->
+                <TextView
+                    android:id="@+id/tv_label_full_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/label_nombre_completo"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/tv_details_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_full_name"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    app:hintEnabled="false"
+                    app:boxBackgroundColor="@color/gris_fondo_icono"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_label_full_name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_full_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_nombre_ejemplo"
+                        android:inputType="textPersonName"
+                        android:maxLines="1"
+                        android:textSize="16sp"
+                        android:textColor="@color/texto_principal" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Campo Correo -->
+                <TextView
+                    android:id="@+id/tv_label_email"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/label_correo"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/til_full_name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_email"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    app:hintEnabled="false"
+                    app:boxBackgroundColor="@color/gris_fondo_icono"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_label_email"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_correo_ejemplo"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
+                        android:textSize="16sp"
+                        android:textColor="@color/texto_principal" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Campo Teléfono -->
+                <TextView
+                    android:id="@+id/tv_label_phone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/label_telefono"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/til_email"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_phone"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    app:hintEnabled="false"
+                    app:boxBackgroundColor="@color/gris_fondo_icono"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_label_phone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_telefono_ejemplo"
+                        android:inputType="phone"
+                        android:maxLines="1"
+                        android:textSize="16sp"
+                        android:textColor="@color/texto_principal" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Tarjeta 2: Rol de Usuario -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_user_role"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/blanco"
+            app:strokeColor="@color/borde_tarjeta"
+            app:strokeWidth="1dp"
+            app:layout_constraintTop_toBottomOf="@id/cv_employee_details"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tv_role_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rol_usuario_titulo"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <!-- Opción Cajero (Seleccionada por defecto visualmente) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_role_cajero"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:minHeight="64dp"
+                    android:text="@string/rol_cajero"
+                    android:textColor="@color/blanco"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    app:backgroundTint="@color/verde_primario"
+                    app:cornerRadius="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_role_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <!-- Opción Administrador (No seleccionada) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_role_administrador"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:minHeight="64dp"
+                    android:text="@string/rol_administrador"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    app:strokeColor="@color/borde_tarjeta"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/btn_role_cajero"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Tarjeta 3: Contraseña Temporal -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_temp_password"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/blanco"
+            app:strokeColor="@color/borde_tarjeta"
+            app:strokeWidth="1dp"
+            app:layout_constraintTop_toBottomOf="@id/cv_user_role"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/tv_temp_password_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contrasena_temporal_titulo"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_temp_password_subtitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/contrasena_temporal_subtitulo"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:lineSpacingMultiplier="1.1"
+                    app:layout_constraintTop_toBottomOf="@id/tv_temp_password_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <!-- Recuadro Gris del Código -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_password_box"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/gris_fondo_icono"
+                    app:strokeColor="@color/borde_tarjeta"
+                    app:strokeWidth="1dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_temp_password_subtitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_generated_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="16dp"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:typeface="monospace"
+                        android:letterSpacing="0.15"
+                        tools:text="FC-2023-XYZ" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Botón Copiar y Compartir -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_copy_share"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:minHeight="48dp"
+                    android:text="@string/boton_copiar_compartir"
+                    android:textColor="@color/morado_acento"
+                    android:textSize="16sp"
+                    android:textAllCaps="false"
+                    app:strokeColor="@color/morado_acento"
+                    app:strokeWidth="1dp"
+                    app:icon="@drawable/ic_content_copy"
+                    app:iconTint="@color/morado_acento"
+                    app:iconGravity="textStart"
+                    app:cornerRadius="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/cv_password_box"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Botón Crear Empleado -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_submit_employee"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:minHeight="54dp"
+            android:text="@string/boton_crear_empleado"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            app:backgroundTint="@color/verde_primario"
+            app:cornerRadius="12dp"
+            app:layout_constraintTop_toBottomOf="@id/cv_temp_password"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

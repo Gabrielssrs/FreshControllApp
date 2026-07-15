@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://tools.android.com/tools"
+    android:id="@+id/cv_notification_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    tools:cardBackgroundColor="@color/rojo_fondo_alerta"
+    tools:strokeColor="@color/error"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:foreground="?attr/selectableItemBackground">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_notification_icon_bg"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            tools:cardBackgroundColor="@color/error"
+            app:strokeWidth="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_notification_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/descripcion_icono_notificacion"
+                tools:src="@drawable/ic_remove_shopping_cart"
+                tools:tint="@color/blanco" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/tv_product_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/texto_principal"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cv_notification_icon_bg"
+            app:layout_constraintEnd_toStartOf="@id/iv_chevron_action"
+            tools:text="Leche Entera 1L" />
+
+        <TextView
+            android:id="@+id/tv_notification_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_product_name"
+            app:layout_constraintStart_toStartOf="@id/tv_product_name"
+            app:layout_constraintEnd_toStartOf="@id/iv_chevron_action"
+            tools:textColor="@color/rojo_oscuro_icono"
+            tools:text="¡Sin existencias!" />
+
+        <ImageView
+            android:id="@+id/iv_chevron_action"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_fecha_right"
+            app:tint="@color/borde_tarjeta"
+            android:contentDescription="@null"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
