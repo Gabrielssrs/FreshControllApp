@@ -61,6 +61,14 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.inventoryFragment)
         }
 
+        binding.cvAddEmployee.setOnClickListener {
+            findNavController().navigate(R.id.addEmployeeFragment)
+        }
+
+        binding.btnProfile.setOnClickListener {
+            findNavController().navigate(R.id.profileFragment)
+        }
+
         // CORRECCIÓN: cvBuscar en lugar de btnSearch
         binding.cvBuscar.setOnClickListener {
             // TODO: Implementar navegación a Búsqueda cuando la pantalla esté asignada

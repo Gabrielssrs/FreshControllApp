@@ -23,7 +23,7 @@
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/atras"
-            android:src="@drawable/ic_menu_revert"
+            android:src="@drawable/ic_arrow_back"
             app:tint="@color/texto_principal"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -104,7 +104,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_search_products"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -118,7 +118,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <AutoCompleteTextView
                     android:id="@+id/et_search_products"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -127,7 +127,8 @@
                     android:maxLines="1"
                     android:textSize="16sp"
                     android:textColor="@color/texto_principal"
-                    android:paddingVertical="16dp" />
+                    android:paddingVertical="16dp"
+                    android:completionThreshold="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

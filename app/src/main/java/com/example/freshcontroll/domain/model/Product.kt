@@ -14,6 +14,11 @@ data class Product(
     val minStock: Double,
     val unitType: String,
     val price: Double,
+    val costPrice: Double,
     val expirationDate: Long?,
     val imageUrl: String?
-)
+) {
+    override fun toString(): String {
+        return if (barcode.isNullOrBlank()) name else "$name ($barcode)"
+    }
+}

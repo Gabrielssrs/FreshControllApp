@@ -12,8 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import coil.load
 import com.example.freshcontroll.R
 import com.example.freshcontroll.databinding.FragmentProductDetailBinding
+import com.example.freshcontroll.domain.model.UserRole
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -55,7 +57,10 @@ class ProductDetailFragment : Fragment() {
 
         // CORRECCIÓN: btnEditProduct en lugar de btnEdit
         binding.btnEditProduct.setOnClickListener {
-            // TODO: Implementar navegación a edición (ej. reusando RegisterProductFragment con args)
+            val action = ProductDetailFragmentDirections.actionProductDetailToRegisterProduct(
+                productId = args.productId
+            )
+            findNavController().navigate(action)
         }
 
         // CORRECCIÓN: btnDeleteProduct en lugar de btnDelete
@@ -69,25 +74,58 @@ class ProductDetailFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.product.collect { product ->
                     product?.let {
+                        // Carga de imagen con Coil
+                        if (!it.imageUrl.isNullOrBlank()) {
+                            binding.ivProductHeroImage.load(it.imageUrl) {
+                                crossfade(true)
+                                placeholder(R.drawable.ic_edit)
+                                error(R.drawable.ic_edit)
+                            }
+                            binding.ivProductHeroImage.imageTintList = null
+                        } else {
+                            binding.ivProductHeroImage.setImageResource(R.drawable.ic_edit)
+                            binding.ivProductHeroImage.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.borde_tarjeta)
+                        }
+
                         binding.tvProductName.text = it.name
                         binding.tvProductCategory.text = it.category
+                        binding.tvProductSku.text = if (it.barcode.isNullOrBlank()) "" else "Barcode: ${it.barcode}"
 
-                        // CORRECCIÓN: tvSalePriceValue en lugar de tvProductPrice
+                        // Precios
                         binding.tvSalePriceValue.text = String.format("S/ %.2f", it.price)
+                        binding.tvCostPriceValue.text = String.format("S/ %.2f", it.costPrice)
 
-                        // CORRECCIÓN: tvStockCurrentAmount en lugar de tvProductStock
+                        // Stock
                         binding.tvStockCurrentAmount.text = "Stock Actual: ${it.currentStock} ${it.unitType}"
+
+                        // Fecha de Vencimiento
+                        if (it.expirationDate != null && it.expirationDate > 0) {
+                            val sdf = java.text.SimpleDateFormat("dd 'de' MMMM, yyyy", java.util.Locale("es", "ES"))
+                            binding.tvExpirationDateValue.text = sdf.format(java.util.Date(it.expirationDate))
+                        } else {
+                            binding.tvExpirationDateValue.text = "Sin fecha establecida"
+                        }
 
                         // Lógica de color de stock
                         val context = requireContext()
-                        val stockColor = when {
-                            it.currentStock <= 0 -> ContextCompat.getColor(context, R.color.error)
-                            it.currentStock <= it.minStock -> ContextCompat.getColor(context, R.color.naranja_alerta)
-                            else -> ContextCompat.getColor(context, R.color.verde_primario)
+                        val (stockColor, stockLabel) = when {
+                            it.currentStock <= 0 -> {
+                                ContextCompat.getColor(context, R.color.error) to "Sin stock"
+                            }
+                            it.currentStock <= it.minStock -> {
+                                ContextCompat.getColor(context, R.color.naranja_alerta) to "Stock bajo"
+                            }
+                            else -> {
+                                ContextCompat.getColor(context, R.color.verde_primario) to "En stock"
+                            }
                         }
 
-                        // Aplicamos el color al texto correcto
                         binding.tvStockCurrentAmount.setTextColor(stockColor)
+                        binding.tvStockStatusLabel.text = stockLabel
+                        binding.cvStockBadge.setCardBackgroundColor(
+                            if (it.currentStock <= it.minStock) ContextCompat.getColor(context, R.color.rojo_fondo_alerta)
+                            else ContextCompat.getColor(context, R.color.verde_pago_aprobado_fondo)
+                        )
                     }
                 }
             }

@@ -32,6 +32,7 @@ data class ProductEntity(
     val minStock: Double,
     val unitType: String,
     val price: Double,
+    val costPrice: Double,
     val expirationDate: Long?,
     val imageUrl: String?,
     val isSynced: Boolean = false

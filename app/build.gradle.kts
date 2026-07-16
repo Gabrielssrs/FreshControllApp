@@ -78,6 +78,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx") // notificaciones push
+    implementation("com.google.firebase:firebase-storage-ktx")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
 
     // --- ML Kit (escaneo de código de barras) ---
     implementation("com.google.mlkit:barcode-scanning:17.3.0")
@@ -109,6 +111,9 @@ dependencies {
 
     // Moshi (si usas el conversor de Moshi arriba)
     implementation("com.squareup.moshi:moshi-kotlin:1.15.1")
+
+    // Coil (Carga de imágenes)
+    implementation("io.coil-kt:coil:2.6.0")
 
 
 

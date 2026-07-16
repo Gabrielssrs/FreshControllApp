@@ -35,7 +35,7 @@ import com.example.freshcontroll.data.local.entity.UserEntity
         AuditLogEntity::class,
         CashRegisterCloseEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class FreshControlDatabase : RoomDatabase() {
@@ -69,7 +69,7 @@ abstract class FreshControlDatabase : RoomDatabase() {
                     FreshControlDatabase::class.java,
                     "freshcontrol_database"
                 )
-                    // .fallbackToDestructiveMigration() // Útil en etapa de desarrollo inicial
+                    .fallbackToDestructiveMigration() // Útil en etapa de desarrollo inicial
                     .build()
 
                 INSTANCE = instance

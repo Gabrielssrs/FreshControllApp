@@ -37,7 +37,9 @@ class EmployeeManagementFragment : Fragment() {
         // Observación de empleados
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.employeeList.collect { adapter.submitList(it) }
+                viewModel.employeeList.collect { 
+                    adapter.submitList(it.toList()) 
+                }
             }
         }
 

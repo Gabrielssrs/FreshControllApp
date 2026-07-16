@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.freshcontroll.domain.model.Product
 import com.example.freshcontroll.domain.repository.AuthRepository
+import com.example.freshcontroll.domain.repository.StorageRepository
 import com.example.freshcontroll.domain.usecase.inventory.RegisterProductUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,11 +29,20 @@ sealed class RegisterProductUiState {
 @HiltViewModel
 class RegisterProductViewModel @Inject constructor(
     private val registerProductUseCase: RegisterProductUseCase,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val storageRepository: StorageRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<RegisterProductUiState>(RegisterProductUiState.Idle)
     val uiState: StateFlow<RegisterProductUiState> = _uiState.asStateFlow()
+
+    // Uri local temporal para la imagen seleccionada de la galería
+    private val _selectedImageUri = MutableStateFlow<android.net.Uri?>(null)
+    val selectedImageUri: StateFlow<android.net.Uri?> = _selectedImageUri.asStateFlow()
+
+    fun setImageUri(uri: android.net.Uri?) {
+        _selectedImageUri.value = uri
+    }
 
     fun onSaveProduct(
         id: String = "",
@@ -41,6 +51,7 @@ class RegisterProductViewModel @Inject constructor(
         category: String,
         sku: String,
         price: Double,
+        costPrice: Double,
         currentStock: Double,
         minStock: Double,
         unitType: String,
@@ -65,8 +76,27 @@ class RegisterProductViewModel @Inject constructor(
                 return@launch
             }
 
+            // --- PASO PREVIO: SUBIDA A FIREBASE STORAGE ---
+            // Si hay una Uri local seleccionada, aquí es donde debemos subirla
+            // para obtener la URL pública (String) de Firebase.
+            var finalImageUrl = imageUrl // Por defecto usamos la que ya venía (ej. de Open Food Facts)
+
+            _selectedImageUri.value?.let { localUri ->
+                // Generamos un ID temporal si es un producto nuevo para el nombre del archivo
+                val imageId = id.ifBlank { java.util.UUID.randomUUID().toString() }
+                
+                storageRepository.uploadProductImage(localUri, imageId)
+                    .onSuccess { downloadUrl ->
+                        finalImageUrl = downloadUrl
+                    }
+                    .onFailure { exception ->
+                        _uiState.value = RegisterProductUiState.Error("Error al subir la imagen: ${exception.message}")
+                        return@launch
+                    }
+            }
+
             val product = Product(
-                id = id,
+                id = id.ifBlank { java.util.UUID.randomUUID().toString() },
                 storeId = currentUser.storeId,
                 barcode = barcode,
                 name = name,
@@ -76,8 +106,9 @@ class RegisterProductViewModel @Inject constructor(
                 minStock = minStock,
                 unitType = unitType,
                 price = price,
+                costPrice = costPrice,
                 expirationDate = expirationDate,
-                imageUrl = imageUrl
+                imageUrl = finalImageUrl // Guardamos la URL final (remota o previa)
             )
 
             registerProductUseCase(product)

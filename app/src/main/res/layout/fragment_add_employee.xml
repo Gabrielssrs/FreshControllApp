@@ -302,12 +302,13 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Tarjeta 3: Contraseña Temporal -->
+        <!-- Tarjeta 3: Contraseña Temporal (Invisible por defecto) -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_temp_password"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:visibility="gone"
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp"
             app:cardBackgroundColor="@color/blanco"

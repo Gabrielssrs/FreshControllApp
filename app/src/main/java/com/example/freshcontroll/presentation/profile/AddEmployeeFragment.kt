@@ -36,16 +36,40 @@ class AddEmployeeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupListeners()
+        observeViewModel()
+    }
+
+    private fun setupListeners() {
+        binding.btnBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
         // Mapeo: Cajero -> EMPLOYEE, Administrador -> OWNER
-        binding.btnRoleCajero.setOnClickListener { selectedRole = UserRole.EMPLOYEE }
-        binding.btnRoleAdministrador.setOnClickListener { selectedRole = UserRole.OWNER }
+        binding.btnRoleCajero.setOnClickListener { 
+            selectedRole = UserRole.EMPLOYEE
+            updateRoleUI()
+        }
+        binding.btnRoleAdministrador.setOnClickListener { 
+            selectedRole = UserRole.OWNER
+            updateRoleUI()
+        }
 
         // Incluye email y phone como se requiere
         binding.btnSubmitEmployee.setOnClickListener {
+            val name = binding.etFullName.text.toString().trim()
+            val email = binding.etEmail.text.toString().trim()
+            val phone = binding.etPhone.text.toString().trim()
+
+            if (name.isEmpty() || email.isEmpty() || phone.isEmpty()) {
+                // Podrías mostrar un Snackbar aquí si quieres validación básica
+                return@setOnClickListener
+            }
+
             viewModel.createEmployeeAccount(
-                name = binding.etFullName.text.toString(),
-                email = binding.etEmail.text.toString(),
-                phone = binding.etPhone.text.toString(),
+                name = name,
+                email = email,
+                phone = phone,
                 role = selectedRole
             )
         }
@@ -57,7 +81,25 @@ class AddEmployeeFragment : Fragment() {
                 clip.setPrimaryClip(ClipData.newPlainText("Password", pass))
             }
         }
+    }
 
+    private fun updateRoleUI() {
+        if (selectedRole == UserRole.EMPLOYEE) {
+            binding.btnRoleCajero.setBackgroundColor(requireContext().getColor(com.example.freshcontroll.R.color.verde_primario))
+            binding.btnRoleCajero.setTextColor(requireContext().getColor(com.example.freshcontroll.R.color.blanco))
+            
+            binding.btnRoleAdministrador.setBackgroundColor(requireContext().getColor(android.R.color.transparent))
+            binding.btnRoleAdministrador.setTextColor(requireContext().getColor(com.example.freshcontroll.R.color.texto_principal))
+        } else {
+            binding.btnRoleAdministrador.setBackgroundColor(requireContext().getColor(com.example.freshcontroll.R.color.verde_primario))
+            binding.btnRoleAdministrador.setTextColor(requireContext().getColor(com.example.freshcontroll.R.color.blanco))
+
+            binding.btnRoleCajero.setBackgroundColor(requireContext().getColor(android.R.color.transparent))
+            binding.btnRoleCajero.setTextColor(requireContext().getColor(com.example.freshcontroll.R.color.texto_principal))
+        }
+    }
+
+    private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.generatedPassword.collect { pass ->
@@ -65,6 +107,8 @@ class AddEmployeeFragment : Fragment() {
                         currentPassword = it
                         binding.cvTempPassword.isVisible = true
                         binding.tvGeneratedPassword.text = it
+                        // Opcional: Ocultar botón de crear tras el éxito para evitar duplicados
+                        binding.btnSubmitEmployee.isEnabled = false
                     }
                 }
             }

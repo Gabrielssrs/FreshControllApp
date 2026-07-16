@@ -194,6 +194,7 @@
     <string name="exito_titulo">¡Listo!\nTu tienda fue creada</string>
     <string name="exito_subtitulo">Ya puedes comenzar a registrar tus\nproductos y hacer tu primera venta.</string>
     <string name="btn_comenzar">Comenzar</string>
+    <string name="cambiar_foto">Cambiar foto</string>
 
 
 </resources>

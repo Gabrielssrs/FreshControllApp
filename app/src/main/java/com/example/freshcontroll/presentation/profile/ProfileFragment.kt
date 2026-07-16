@@ -31,13 +31,17 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.btnMenu.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.userProfile.collect { user ->
                     user?.let {
                         // TODO: Debería mostrar el nombre de la tienda (Store), pendiente GetStoreUseCase
                         binding.tvBusinessName.text = it.fullName
-                        binding.tvUserRole.text = it.role.name
+                        binding.tvUserRole.text = if (it.role == UserRole.OWNER) "Dueño / Administrador" else "Empleado / Cajero"
 
                         val isOwner = it.role == UserRole.OWNER
                         // Control de visibilidad para las tarjetas de dueño

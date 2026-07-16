@@ -15,6 +15,7 @@ fun ProductEntity.toDomain(): Product {
         minStock = this.minStock,
         unitType = this.unitType,
         price = this.price,
+        costPrice = this.costPrice,
         expirationDate = this.expirationDate,
         imageUrl = this.imageUrl
     )
@@ -32,6 +33,7 @@ fun Product.toEntity(isSynced: Boolean = false): ProductEntity {
         minStock = this.minStock,
         unitType = this.unitType,
         price = this.price,
+        costPrice = this.costPrice,
         expirationDate = this.expirationDate,
         imageUrl = this.imageUrl,
         isSynced = isSynced

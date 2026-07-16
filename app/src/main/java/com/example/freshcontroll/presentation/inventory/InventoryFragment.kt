@@ -80,7 +80,7 @@ class InventoryFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.products.collect { productList ->
-                        productAdapter.submitList(productList)
+                        productAdapter.submitList(productList.toList())
 
                         // 2. AÑADIR ESTAS DOS LÍNEAS PARA EL CONTADOR DE ARTÍCULOS
                         val count = productList.size

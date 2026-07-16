@@ -62,11 +62,55 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:textColor="@color/texto_secundario"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@id/tv_product_name"
             app:layout_constraintStart_toStartOf="@id/tv_product_name"
             app:layout_constraintEnd_toStartOf="@id/tv_product_item_total"
-            tools:text="0.5 kg x $14.00/kg" />
+            tools:text="14.00/kg" />
+
+        <LinearLayout
+            android:id="@+id/layout_quantity_control"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toBottomOf="@id/tv_product_calculation"
+            app:layout_constraintStart_toStartOf="@id/tv_product_name">
+
+            <ImageButton
+                android:id="@+id/btn_decrease_quantity"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@color/gris_fondo_icono"
+                android:contentDescription="@string/atras"
+                android:src="@drawable/ic_remove_shopping_cart"
+                app:tint="@color/texto_secundario"
+                android:padding="6dp"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:id="@+id/tv_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:textColor="@color/texto_principal"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="0.5 kg" />
+
+            <ImageButton
+                android:id="@+id/btn_increase_quantity"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@color/gris_fondo_icono"
+                android:contentDescription="@string/añadir_producto"
+                android:src="@drawable/ic_add"
+                app:tint="@color/verde_primario"
+                android:padding="6dp"
+                android:scaleType="fitCenter"/>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_product_item_total"
@@ -74,12 +118,12 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
             android:textColor="@color/verde_primario"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_remove_item"
-            tools:text="$22.50" />
+            tools:text="S/ 22.50" />
 
         <ImageButton
             android:id="@+id/btn_remove_item"

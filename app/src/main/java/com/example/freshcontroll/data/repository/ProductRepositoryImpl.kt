@@ -69,9 +69,9 @@ class ProductRepositoryImpl @Inject constructor(
 
                     BarcodeLookupResult.RemoteSuccess(
                         barcode = barcode,
-                        prefilledName = remoteProduct.product_name ?: "",
+                        prefilledName = remoteProduct.productName ?: "",
                         prefilledCategory = remoteProduct.categories?.split(",")?.firstOrNull()?.trim() ?: "",
-                        prefilledImageUrl = remoteProduct.image_url
+                        prefilledImageUrl = remoteProduct.imageUrl
                     )
                 } else {
                     // No se encontró en ninguna base de datos externa
@@ -102,6 +102,7 @@ class ProductRepositoryImpl @Inject constructor(
             "minStock" to product.minStock,
             "unitType" to product.unitType,
             "price" to product.price,
+            "costPrice" to product.costPrice,
             "expirationDate" to product.expirationDate,
             "imageUrl" to product.imageUrl
         )

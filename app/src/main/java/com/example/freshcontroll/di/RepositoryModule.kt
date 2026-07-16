@@ -10,12 +10,14 @@ import com.example.freshcontroll.data.repository.CashRepositoryImpl
 import com.example.freshcontroll.data.repository.EmployeeRepositoryImpl
 import com.example.freshcontroll.data.repository.ProductRepositoryImpl
 import com.example.freshcontroll.data.repository.SaleRepositoryImpl
+import com.example.freshcontroll.data.repository.StorageRepositoryImpl
 import com.example.freshcontroll.domain.repository.AuditRepository
 import com.example.freshcontroll.domain.repository.AuthRepository
 import com.example.freshcontroll.domain.repository.CashRepository
 import com.example.freshcontroll.domain.repository.EmployeeRepository
 import com.example.freshcontroll.domain.repository.ProductRepository
 import com.example.freshcontroll.domain.repository.SaleRepository
+import com.example.freshcontroll.domain.repository.StorageRepository
 import javax.inject.Singleton
 
 /**
@@ -62,4 +64,10 @@ abstract class RepositoryModule {
     abstract fun bindCashRepository(
         impl: CashRepositoryImpl
     ): CashRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindStorageRepository(
+        impl: StorageRepositoryImpl
+    ): StorageRepository
 }

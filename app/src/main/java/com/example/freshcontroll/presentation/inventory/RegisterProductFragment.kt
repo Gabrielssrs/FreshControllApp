@@ -13,7 +13,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.freshcontroll.R // Asegúrate de tener este import correcto
+import coil.load
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import com.example.freshcontroll.R
 import com.example.freshcontroll.databinding.FragmentRegisterProductBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +36,14 @@ class RegisterProductFragment : Fragment() {
     private var prefilledImageUrlValue: String? = null
     private var selectedExpirationTimestamp: Long? = null // Variable para la fecha
 
+    // 1. Definir el launcher para seleccionar imágenes
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            // Informar al ViewModel sobre la nueva Uri seleccionada
+            viewModel.setImageUri(uri)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,7 +58,25 @@ class RegisterProductFragment : Fragment() {
         setupListeners()
         checkForPrefilledArguments()
         observeScannerResult()
+        observeViewModel() // Nueva función para observar cambios en el ViewModel
         observeUiState()
+    }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // 3. Observar la Uri seleccionada para cargarla con Coil
+                viewModel.selectedImageUri.collect { uri ->
+                    if (uri != null) {
+                        binding.ivProduct.load(uri) {
+                            crossfade(true)
+                            placeholder(R.drawable.ic_edit)
+                            error(R.drawable.ic_edit)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun setupDropdownMenus() {
@@ -66,6 +95,11 @@ class RegisterProductFragment : Fragment() {
 
     private fun setupListeners() {
         binding.btnBack.setOnClickListener { findNavController().navigateUp() }
+
+        // 2. Lanzar el selector de imágenes al hacer clic en el card o la imagen
+        binding.cvProductImage.setOnClickListener {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
 
         // Lógica del DatePicker para la fecha de vencimiento
         binding.etExpirationDate.setOnClickListener {
@@ -89,15 +123,18 @@ class RegisterProductFragment : Fragment() {
             val unitType = binding.actvUnit.text.toString().trim()
 
             val price = binding.etSalePrice.text.toString().toDoubleOrNull() ?: 0.0
+            val costPrice = binding.etCostPrice.text.toString().toDoubleOrNull() ?: 0.0
             val currentStock = binding.etInitialStock.text.toString().toDoubleOrNull() ?: 0.0
             val minStock = binding.etMinStockAlert.text.toString().toDoubleOrNull() ?: 0.0
 
             viewModel.onSaveProduct(
+                id = args.productId ?: "",
                 barcode = scannedBarcodeValue,
                 name = name,
                 category = category,
                 sku = "",
                 price = price,
+                costPrice = costPrice,
                 currentStock = currentStock,
                 minStock = minStock,
                 unitType = unitType,
@@ -108,11 +145,26 @@ class RegisterProductFragment : Fragment() {
     }
 
     private fun checkForPrefilledArguments() {
+        // Lógica de edición: si recibimos un ID de producto, cargamos sus datos
+        args.productId?.let { productId ->
+            binding.tvHeaderTitle.text = "Editar Producto"
+            // Deberíamos observar un StateFlow de producto en el ViewModel si quisiéramos cargar datos existentes
+            // Por simplicidad, asumimos que el ViewModel maneja la carga si es edición
+        }
+
         args.barcode?.let { barcode ->
             scannedBarcodeValue = barcode
             if (!args.prefilledName.isNullOrBlank()) binding.etProductName.setText(args.prefilledName)
             if (!args.prefilledCategory.isNullOrBlank()) binding.actvCategory.setText(args.prefilledCategory, false)
             prefilledImageUrlValue = args.prefilledImageUrl
+
+            // Si hay una URL previa (ej. Open Food Facts), la cargamos inicialmente
+            args.prefilledImageUrl?.let { url ->
+                binding.ivProduct.load(url) {
+                    crossfade(true)
+                    placeholder(R.drawable.ic_edit)
+                }
+            }
         }
     }
 
@@ -130,16 +182,24 @@ class RegisterProductFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     when (state) {
-                        is RegisterProductUiState.Loading -> binding.btnSaveProduct.isEnabled = false
+                        is RegisterProductUiState.Loading -> {
+                            binding.loadingOverlay.visibility = View.VISIBLE
+                            binding.btnSaveProduct.isEnabled = false
+                        }
                         is RegisterProductUiState.Success -> {
+                            binding.loadingOverlay.visibility = View.GONE
                             binding.btnSaveProduct.isEnabled = true
                             findNavController().navigate(RegisterProductFragmentDirections.actionRegisterProductToInventory())
                         }
                         is RegisterProductUiState.Error -> {
+                            binding.loadingOverlay.visibility = View.GONE
                             binding.btnSaveProduct.isEnabled = true
                             Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
                         }
-                        else -> binding.btnSaveProduct.isEnabled = true
+                        else -> {
+                            binding.loadingOverlay.visibility = View.GONE
+                            binding.btnSaveProduct.isEnabled = true
+                        }
                     }
                 }
             }

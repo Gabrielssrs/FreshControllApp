@@ -6,6 +6,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.example.freshcontroll.R
 import com.example.freshcontroll.databinding.ItemProductBinding
 import com.example.freshcontroll.domain.model.Product
@@ -39,6 +41,20 @@ class ProductAdapter(
             binding.tvProductPrice.text = String.format("S/ %.2f / %s", product.price, product.unitType)
             binding.tvProductQuantity.text = "Cant: ${product.currentStock} ${product.unitType}"
 
+            // Carga de imagen con Coil
+            if (!product.imageUrl.isNullOrBlank()) {
+                binding.ivProductImage.load(product.imageUrl) {
+                    crossfade(true)
+                    placeholder(R.drawable.ic_edit)
+                    error(R.drawable.ic_edit)
+                    transformations(RoundedCornersTransformation(8f))
+                }
+                binding.ivProductImage.imageTintList = null // Quitar el tinte si hay imagen
+            } else {
+                binding.ivProductImage.setImageResource(R.drawable.ic_edit)
+                binding.ivProductImage.imageTintList = ContextCompat.getColorStateList(context, R.color.borde_tarjeta)
+            }
+
             // Lógica de color y texto del badge de stock
             when {
                 product.currentStock <= 0 -> {
@@ -60,9 +76,8 @@ class ProductAdapter(
                 onItemClick(product.id)
             }
 
-            // Click listener para el botón de editar (puedes definir aquí su acción específica)
+            // Click listener para el botón de editar
             binding.btnEditProduct.setOnClickListener {
-                // TODO: Acción de edición rápida si lo requieres, o navega al detalle
                 onItemClick(product.id)
             }
         }

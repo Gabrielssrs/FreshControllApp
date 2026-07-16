@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.freshcontroll.databinding.ItemSaleProductBinding
 import com.example.freshcontroll.domain.model.SaleDetail
 
-class SaleProductAdapter(private val onRemoveClick: (String) -> Unit) :
-    ListAdapter<SaleDetail, SaleProductAdapter.ViewHolder>(DiffCallback()) {
+class SaleProductAdapter(
+    private val onQuantityChange: (String, Double) -> Unit,
+    private val onRemoveClick: (String) -> Unit
+) : ListAdapter<SaleDetail, SaleProductAdapter.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         ItemSaleProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -19,17 +21,24 @@ class SaleProductAdapter(private val onRemoveClick: (String) -> Unit) :
 
     inner class ViewHolder(private val binding: ItemSaleProductBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: SaleDetail) {
-            // Asignación corregida según los IDs reales del XML
             binding.tvProductName.text = item.productName
+            binding.tvProductCalculation.text = "S/ ${String.format("%.2f", item.unitPrice)}"
+            binding.tvQuantity.text = "${item.quantity}"
+            binding.tvProductItemTotal.text = "S/ ${String.format("%.2f", item.totalPrice)}"
 
-            // Usando tvProductCalculation (antes tvQuantityPrice)
-            binding.tvProductCalculation.text = "${item.quantity} x S/ ${item.unitPrice}"
+            binding.btnDecreaseQuantity.setOnClickListener {
+                if (item.quantity > 1) {
+                    onQuantityChange(item.productId, item.quantity - 1)
+                }
+            }
 
-            // Usando tvProductItemTotal (antes tvTotal)
-            binding.tvProductItemTotal.text = "S/ ${item.quantity * item.unitPrice}"
+            binding.btnIncreaseQuantity.setOnClickListener {
+                onQuantityChange(item.productId, item.quantity + 1)
+            }
 
-            // Usando btnRemoveItem (antes btnRemove)
-            binding.btnRemoveItem.setOnClickListener { onRemoveClick(item.productId) }
+            binding.btnRemoveItem.setOnClickListener { 
+                onRemoveClick(item.productId) 
+            }
         }
     }
 

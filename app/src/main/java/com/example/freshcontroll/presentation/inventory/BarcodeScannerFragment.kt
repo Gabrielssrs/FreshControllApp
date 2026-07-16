@@ -37,8 +37,6 @@ class BarcodeScannerFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: BarcodeScannerViewModel by viewModels()
-
-    // Recuperamos los SafeArgs (caller)
     private val args: BarcodeScannerFragmentArgs by navArgs()
 
     private lateinit var cameraExecutor: ExecutorService
@@ -51,8 +49,10 @@ class BarcodeScannerFragment : Fragment() {
         if (isGranted) {
             startCamera()
         } else {
-            Snackbar.make(binding.root, "Se requiere permiso de cámara para escanear", Snackbar.LENGTH_INDEFINITE)
-                .setAction("Ok") { findNavController().navigateUp() }.show()
+            if (_binding != null) {
+                Snackbar.make(binding.root, "Se requiere permiso de cámara para escanear", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Ok") { findNavController().navigateUp() }.show()
+            }
         }
     }
 
@@ -91,6 +91,9 @@ class BarcodeScannerFragment : Fragment() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener({
+            // CORRECCIÓN ANTI-NPE: Si el usuario presionó Atrás antes de que la cámara cargue, detenemos el proceso
+            if (_binding == null) return@addListener
+
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
             val preview = Preview.Builder()
@@ -114,14 +117,22 @@ class BarcodeScannerFragment : Fragment() {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(viewLifecycleOwner, cameraSelector, preview, imageAnalyzer)
             } catch (exc: Exception) {
-                exc.printStackTrace() // Esto imprime el error real en tu Logcat para depuración
-                Snackbar.make(binding.root, "Error al iniciar la cámara: ${exc.localizedMessage}", Snackbar.LENGTH_SHORT).show()
+                exc.printStackTrace()
+                if (_binding != null) {
+                    Snackbar.make(binding.root, "Error al iniciar la cámara: ${exc.localizedMessage}", Snackbar.LENGTH_SHORT).show()
+                }
             }
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
     @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
     private fun processImageProxy(imageProxy: androidx.camera.core.ImageProxy) {
+        // CORRECCIÓN ANTI-NPE: Protección para flujos asíncronos
+        if (_binding == null) {
+            imageProxy.close()
+            return
+        }
+
         val mediaImage = imageProxy.image
         if (mediaImage != null && !hasProcessedBarcode) {
             val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
@@ -134,11 +145,10 @@ class BarcodeScannerFragment : Fragment() {
                         hasProcessedBarcode = true
                         lastScannedBarcode = barcodeValue
 
-                        // Si venimos desde el flujo de Ventas, devolvemos el código directamente de forma pasiva
-                        if (args.caller == "sales") {
+                        // CORRECCIÓN DE FLUJO: Evaluamos quién llamó al escáner
+                        if (args.caller == "newSale") {
                             returnBarcodeToPreviousScreen(barcodeValue)
                         } else {
-                            // De lo contrario (Inventario), activamos la búsqueda híbrida inteligente
                             viewModel.processBarcode(barcodeValue)
                         }
                     }
@@ -155,13 +165,11 @@ class BarcodeScannerFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
+                    if (_binding == null) return@collect // CORRECCIÓN ANTI-NPE
+
                     when (state) {
-                        is ScannerUiState.Idle -> {
-                            // Estado inicial pasivo
-                        }
-                        is ScannerUiState.Loading -> {
-                            // Procesando búsqueda en segundo plano
-                        }
+                        is ScannerUiState.Idle -> {}
+                        is ScannerUiState.Loading -> {}
                         is ScannerUiState.Success -> {
                             handleLookupResult(state.result)
                         }
@@ -178,12 +186,10 @@ class BarcodeScannerFragment : Fragment() {
     private fun handleLookupResult(result: BarcodeLookupResult) {
         when (result) {
             is BarcodeLookupResult.LocalSuccess -> {
-                // Caso 1: El producto ya está en base de datos. Navegamos al fragmento de ajuste de stock
                 val action = BarcodeScannerFragmentDirections.actionBarcodeScannerToAdjustStock(result.product.id)
                 findNavController().navigate(action)
             }
             is BarcodeLookupResult.RemoteSuccess -> {
-                // Caso 2: El producto se encontró en la API externa. Navegamos con autocompletado
                 val action = BarcodeScannerFragmentDirections.actionBarcodeScannerToRegisterProduct(
                     barcode = result.barcode,
                     prefilledName = result.prefilledName,
@@ -193,7 +199,6 @@ class BarcodeScannerFragment : Fragment() {
                 findNavController().navigate(action)
             }
             is BarcodeLookupResult.NotFound -> {
-                // Caso 3: No existe en ningún lado. Navegamos a registrar pasándole solo el código de barras
                 val action = BarcodeScannerFragmentDirections.actionBarcodeScannerToRegisterProduct(
                     barcode = result.barcode,
                     prefilledName = null,
@@ -203,7 +208,9 @@ class BarcodeScannerFragment : Fragment() {
                 findNavController().navigate(action)
             }
             is BarcodeLookupResult.Error -> {
-                Snackbar.make(binding.root, result.message, Snackbar.LENGTH_LONG).show()
+                if (_binding != null) {
+                    Snackbar.make(binding.root, result.message, Snackbar.LENGTH_LONG).show()
+                }
                 hasProcessedBarcode = false
             }
         }

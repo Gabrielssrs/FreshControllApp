@@ -46,6 +46,9 @@
         <action
             android:id="@+id/action_productDetail_to_adjustStock"
             app:destination="@id/adjustStockFragment" />
+        <action
+            android:id="@+id/action_productDetail_to_registerProduct"
+            app:destination="@id/registerProductFragment" />
     </fragment>
 
     <fragment
@@ -85,6 +88,11 @@
             app:popUpToInclusive="true" />
 
         <!-- Argumentos opcionales para el autocompletado híbrido -->
+        <argument
+            android:name="productId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
         <argument
             android:name="barcode"
             app:argType="string"
@@ -132,7 +140,14 @@
             app:destination="@id/adjustStockFragment"
             app:popUpTo="@id/barcodeScannerFragment"
             app:popUpToInclusive="true" />
+
+        <!-- 👇 AÑADE ESTA NUEVA ACCIÓN 👇 -->
+        <action
+            android:id="@+id/action_barcodeScanner_to_registerProduct"
+            app:destination="@id/registerProductFragment" />
+
     </fragment>
+
 
     <!-- ... otros fragmentos ... -->
 

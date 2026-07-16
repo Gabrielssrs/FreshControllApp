@@ -1,4 +1,4 @@
-package com.example.freshcontroll.data.remote.dto
+package com.example.freshcontroll.data.remote
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -12,7 +12,7 @@ data class OpenFoodFactsResponseDto(
 
 @JsonClass(generateAdapter = true)
 data class OpenFoodFactsProductDto(
-    @Json(name = "code") val barcode: String?,
+    @Json(name = "code") val code: String?,
     @Json(name = "product_name") val productName: String?,
     @Json(name = "brands") val brands: String?,
     @Json(name = "categories") val categories: String?,

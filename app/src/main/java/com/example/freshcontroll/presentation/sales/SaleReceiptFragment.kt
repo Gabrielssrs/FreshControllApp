@@ -45,14 +45,15 @@ class SaleReceiptFragment : Fragment() {
                 viewModel.receiptData.collect { data ->
                     data?.let { (sale, details) ->
                         // Corrección: IDs reales del XML
-                        binding.tvTotalAmount.text = "S/ ${sale.total}"
-                        binding.tvSubtotalAmount.text = "S/ ${sale.subtotal}" // Asumiendo campo en Sale
-                        binding.tvTaxesAmount.text = "S/ ${sale.taxes}"       // Asumiendo campo en Sale
+                        binding.tvTotalAmount.text = String.format("S/ %.2f", sale.total)
+                        binding.tvSubtotalAmount.text = String.format("S/ %.2f", sale.subtotal)
+                        binding.tvTaxesAmount.text = String.format("S/ %.2f", sale.taxes)
+                        binding.tvTicketNumber.text = "Ticket #${sale.ticketNumber}"
 
-                        // Si no tienes el ID badge_edited en XML, esta línea fallará
-                        // binding.badgeEdited.isVisible = sale.isEdited
+                        val itemCount = details.sumOf { it.quantity }.toInt()
+                        binding.tvSoldItemsSection.text = "Artículos Vendidos ($itemCount)"
 
-                        soldAdapter.submitList(details)
+                        soldAdapter.submitList(details.toList())
                     }
                 }
             }

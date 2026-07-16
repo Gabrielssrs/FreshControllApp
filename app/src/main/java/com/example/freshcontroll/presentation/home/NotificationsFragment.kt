@@ -76,29 +76,26 @@ class NotificationsFragment : Fragment() {
 
                     // Sección: Sin Stock
                     if (outOfStockList.isEmpty()) {
-                        // CORRECCIÓN: layoutSectionOutOfStock
                         binding.layoutSectionOutOfStock.visibility = View.GONE
                     } else {
                         binding.layoutSectionOutOfStock.visibility = View.VISIBLE
-                        outOfStockAdapter.submitList(outOfStockList)
+                        outOfStockAdapter.submitList(outOfStockList.toList())
                     }
 
                     // Sección: Por Vencer
                     if (expiringList.isEmpty()) {
-                        // CORRECCIÓN: layoutSectionExpiringProducts
                         binding.layoutSectionExpiringProducts.visibility = View.GONE
                     } else {
                         binding.layoutSectionExpiringProducts.visibility = View.VISIBLE
-                        expiringAdapter.submitList(expiringList)
+                        expiringAdapter.submitList(expiringList.toList())
                     }
 
                     // Sección: Stock Bajo
                     if (lowStockList.isEmpty()) {
-                        // CORRECCIÓN: layoutSectionLowStock
                         binding.layoutSectionLowStock.visibility = View.GONE
                     } else {
                         binding.layoutSectionLowStock.visibility = View.VISIBLE
-                        lowStockAdapter.submitList(lowStockList)
+                        lowStockAdapter.submitList(lowStockList.toList())
                     }
                 }
             }
