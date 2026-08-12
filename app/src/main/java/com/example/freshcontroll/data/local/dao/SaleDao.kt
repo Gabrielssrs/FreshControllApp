@@ -39,4 +39,13 @@ interface SaleDao {
 
     @Query("UPDATE sales SET isSynced = 1 WHERE id = :id")
     suspend fun markSaleAsSynced(id: String)
+
+    @Query("DELETE FROM sales WHERE id = :id")
+    suspend fun deleteSaleById(id: String)
+
+    @Query("DELETE FROM sale_details WHERE saleId = :saleId")
+    suspend fun deleteSaleDetailsBySaleId(saleId: String)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSales(sales: List<SaleEntity>)
 }

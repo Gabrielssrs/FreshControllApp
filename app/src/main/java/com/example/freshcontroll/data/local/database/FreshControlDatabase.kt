@@ -35,7 +35,7 @@ import com.example.freshcontroll.data.local.entity.UserEntity
         AuditLogEntity::class,
         CashRegisterCloseEntity::class
     ],
-    version = 2,
+    version = 4,
     exportSchema = false
 )
 abstract class FreshControlDatabase : RoomDatabase() {
@@ -48,6 +48,10 @@ abstract class FreshControlDatabase : RoomDatabase() {
     abstract fun cashDao(): CashDao
     abstract fun stockMovementDao(): StockMovementDao
     abstract fun storeDao(): StoreDao
+
+    fun clearAllTablesAndReset() {
+        this.clearAllTables()
+    }
 
     /**
      * Patrón Singleton clásico para instanciar la base de datos.

@@ -79,7 +79,7 @@ class BarcodeScannerFragment : Fragment() {
 
     private fun setupListeners() {
         binding.btnBack.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().popBackStack()
         }
 
         binding.btnManualEntry.setOnClickListener {
@@ -218,7 +218,7 @@ class BarcodeScannerFragment : Fragment() {
 
     private fun returnBarcodeToPreviousScreen(barcode: String) {
         findNavController().previousBackStackEntry?.savedStateHandle?.set("scanned_barcode", barcode)
-        findNavController().navigateUp()
+        findNavController().popBackStack()
     }
 
     override fun onDestroyView() {

@@ -15,7 +15,9 @@ fun AuditLogEntity.toDomain(): AuditLog {
         description = this.description,
         timestamp = this.timestamp,
         userId = this.userId,
-        userName = this.userName
+        userName = this.userName,
+        beforeState = this.beforeState,
+        afterState = this.afterState
     )
 }
 
@@ -29,6 +31,8 @@ fun AuditLog.toEntity(isSynced: Boolean = false): AuditLogEntity {
         timestamp = this.timestamp,
         userId = this.userId,
         userName = this.userName,
+        beforeState = this.beforeState,
+        afterState = this.afterState,
         isSynced = isSynced
     )
 }

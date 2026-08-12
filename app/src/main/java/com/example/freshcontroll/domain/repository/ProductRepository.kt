@@ -26,9 +26,13 @@ interface ProductRepository {
 
     fun getProductMovements(productId: String): Flow<List<StockMovement>>
 
+    suspend fun syncStockMovements(productId: String): Result<Unit>
+
     /**
      * Retorna un mapa reactivo con los productos que requieren atención.
      * Llaves esperadas: "outOfStock", "expiring", "lowStock"
      */
     fun getNotifications(storeId: String): Flow<Map<String, List<Product>>>
+
+    suspend fun syncProducts(storeId: String): Result<Unit>
 }

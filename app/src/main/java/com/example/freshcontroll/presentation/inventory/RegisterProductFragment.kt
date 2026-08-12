@@ -18,6 +18,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.freshcontroll.R
 import com.example.freshcontroll.databinding.FragmentRegisterProductBinding
+import com.example.freshcontroll.domain.model.Product
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -35,6 +36,7 @@ class RegisterProductFragment : Fragment() {
     private var scannedBarcodeValue: String? = null
     private var prefilledImageUrlValue: String? = null
     private var selectedExpirationTimestamp: Long? = null // Variable para la fecha
+    private var isDataLoaded = false // Evitar sobreescritura al editar
 
     // 1. Definir el launcher para seleccionar imágenes
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -66,16 +68,54 @@ class RegisterProductFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 // 3. Observar la Uri seleccionada para cargarla con Coil
-                viewModel.selectedImageUri.collect { uri ->
-                    if (uri != null) {
-                        binding.ivProduct.load(uri) {
-                            crossfade(true)
-                            placeholder(R.drawable.ic_edit)
-                            error(R.drawable.ic_edit)
+                launch {
+                    viewModel.selectedImageUri.collect { uri ->
+                        if (uri != null) {
+                            binding.ivProduct.load(uri) {
+                                crossfade(true)
+                                placeholder(R.drawable.ic_edit)
+                                error(R.drawable.ic_edit)
+                            }
                         }
                     }
                 }
+
+                // Observar el producto existente para pre-llenar los campos (Edición)
+                launch {
+                    viewModel.existingProduct.collect { product ->
+                        product?.let { fillProductData(it) }
+                    }
+                }
             }
+        }
+    }
+
+    private fun fillProductData(product: Product) {
+        if (isDataLoaded) return
+        isDataLoaded = true
+
+        binding.etProductName.setText(product.name)
+        binding.actvCategory.setText(product.category, false)
+        binding.actvUnit.setText(product.unitType, false)
+        binding.etSalePrice.setText(product.price.toString())
+        binding.etCostPrice.setText(product.costPrice.toString())
+        binding.etInitialStock.setText(product.currentStock.toString())
+        binding.etMinStockAlert.setText(product.minStock.toString())
+        
+        scannedBarcodeValue = product.barcode
+        prefilledImageUrlValue = product.imageUrl
+
+        if (!product.imageUrl.isNullOrBlank()) {
+            binding.ivProduct.load(product.imageUrl) {
+                crossfade(true)
+                placeholder(R.drawable.ic_edit)
+            }
+        }
+
+        if (product.expirationDate != null && product.expirationDate > 0) {
+            selectedExpirationTimestamp = product.expirationDate
+            val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
+            binding.etExpirationDate.setText(sdf.format(java.util.Date(product.expirationDate)))
         }
     }
 
@@ -94,7 +134,7 @@ class RegisterProductFragment : Fragment() {
 
 
     private fun setupListeners() {
-        binding.btnBack.setOnClickListener { findNavController().navigateUp() }
+        binding.btnBack.setOnClickListener { findNavController().popBackStack() }
 
         // 2. Lanzar el selector de imágenes al hacer clic en el card o la imagen
         binding.cvProductImage.setOnClickListener {
@@ -148,8 +188,7 @@ class RegisterProductFragment : Fragment() {
         // Lógica de edición: si recibimos un ID de producto, cargamos sus datos
         args.productId?.let { productId ->
             binding.tvHeaderTitle.text = "Editar Producto"
-            // Deberíamos observar un StateFlow de producto en el ViewModel si quisiéramos cargar datos existentes
-            // Por simplicidad, asumimos que el ViewModel maneja la carga si es edición
+            viewModel.loadProduct(productId)
         }
 
         args.barcode?.let { barcode ->

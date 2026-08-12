@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.freshcontroll.domain.model.Product
 import com.example.freshcontroll.domain.usecase.inventory.GetProductDetailUseCase
+import com.example.freshcontroll.domain.usecase.inventory.SyncStockMovementsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ProductDetailViewModel @Inject constructor(
-    private val getProductDetailUseCase: GetProductDetailUseCase
+    private val getProductDetailUseCase: GetProductDetailUseCase,
+    private val syncStockMovementsUseCase: SyncStockMovementsUseCase
 ) : ViewModel() {
 
     private val _product = MutableStateFlow<Product?>(null)
@@ -24,6 +26,9 @@ class ProductDetailViewModel @Inject constructor(
 
     fun loadProductDetails(id: String) {
         viewModelScope.launch {
+            // Sincronización inicial silenciosa de movimientos antes de cargar el producto
+            syncStockMovementsUseCase(id)
+
             getProductDetailUseCase(id).collect { currentProduct ->
                 _product.value = currentProduct
             }

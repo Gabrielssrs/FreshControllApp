@@ -64,4 +64,24 @@ class CashRepositoryImpl @Inject constructor(
             cashDao.markAsSynced(close.id)
         }
     }
+
+    override suspend fun syncCashCloses(storeId: String): Result<Unit> = runCatching {
+        val remoteCloses = firestoreService.getDocumentsByField("cash_register_closes", "storeId", storeId)
+        val entities = remoteCloses.map { map ->
+            com.example.freshcontroll.data.local.entity.CashRegisterCloseEntity(
+                id = map["id"] as String,
+                storeId = map["storeId"] as String,
+                userId = map["userId"] as String,
+                timestamp = (map["timestamp"] as? Long) ?: 0L,
+                systemAmount = (map["systemAmount"] as? Number)?.toDouble() ?: 0.0,
+                countedAmount = (map["countedAmount"] as? Number)?.toDouble() ?: 0.0,
+                differenceAmount = (map["differenceAmount"] as? Number)?.toDouble() ?: 0.0,
+                isClosed = map["isClosed"] as? Boolean ?: true,
+                isSynced = true
+            )
+        }
+        if (entities.isNotEmpty()) {
+            cashDao.insertCloses(entities)
+        }
+    }
 }

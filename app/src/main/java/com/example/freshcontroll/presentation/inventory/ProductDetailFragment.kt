@@ -47,7 +47,7 @@ class ProductDetailFragment : Fragment() {
 
     private fun setupListeners() {
         binding.btnBack.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().popBackStack()
         }
 
         binding.btnAdjustStock.setOnClickListener {

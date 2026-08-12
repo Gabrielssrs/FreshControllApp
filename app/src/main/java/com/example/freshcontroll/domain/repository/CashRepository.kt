@@ -16,4 +16,6 @@ interface CashRepository {
     fun getAllCloses(storeId: String): Flow<List<CashRegisterClose>>
 
     suspend fun registerCashClose(close: CashRegisterClose): Result<Unit>
+
+    suspend fun syncCashCloses(storeId: String): Result<Unit>
 }

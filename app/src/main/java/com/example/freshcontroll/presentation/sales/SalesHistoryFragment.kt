@@ -4,16 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.example.freshcontroll.R
 import com.example.freshcontroll.databinding.FragmentSalesHistoryBinding
 import com.example.freshcontroll.presentation.sales.adapter.RecentSaleAdapter
+import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @AndroidEntryPoint
 class SalesHistoryFragment : Fragment() {
@@ -30,20 +37,108 @@ class SalesHistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Corrección: Usamos rvSalesHistory (ID real del XML)
-        val adapter = RecentSaleAdapter { findNavController().navigate(SalesHistoryFragmentDirections.actionSalesHistoryToSaleReceipt(it)) }
-        binding.rvSalesHistory.adapter = adapter
+        setupAdapter()
+        setupFilters()
+        observeUiState()
 
+        binding.btnMenu.setOnClickListener { findNavController().popBackStack() }
+    }
+
+    private fun setupAdapter() {
+        val adapter = RecentSaleAdapter(
+            onItemClick = { saleId -> 
+                findNavController().navigate(SalesHistoryFragmentDirections.actionSalesHistoryToSaleReceipt(saleId)) 
+            },
+            onEditClick = { saleId ->
+                findNavController().navigate(SalesHistoryFragmentDirections.actionSalesHistoryToEditSale(saleId))
+            }
+        )
+        binding.rvSalesHistory.adapter = adapter
+    }
+
+    private fun setupFilters() {
+        binding.btnFilterToday.setOnClickListener { viewModel.setFilter(TimeFilter.TODAY) }
+        binding.btnFilterWeek.setOnClickListener { viewModel.setFilter(TimeFilter.WEEK) }
+        binding.btnFilterMonth.setOnClickListener { viewModel.setFilter(TimeFilter.MONTH) }
+    }
+
+    private fun observeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allStoreSales.collect { sales ->
-                    adapter.submitList(sales)
+                viewModel.uiState.collect { state ->
+                    (binding.rvSalesHistory.adapter as? RecentSaleAdapter)?.submitList(state.sales)
 
-                    // Actualización de los totales en la UI
-                    binding.tvTotalDayAmount.text = "S/ ${sales.sumOf { it.total }}"
-                    binding.tvSalesCountValue.text = "${sales.size}"
+                    // Totales y contador
+                    binding.tvTotalDayAmount.text = String.format(Locale.getDefault(), "S/ %.2f", state.totalAmount)
+                    binding.tvSalesCountValue.text = state.salesCount.toString()
+
+                    // Actualizar estilos de botones de filtro
+                    updateFilterButtons(state.selectedFilter)
+
+                    // Visibilidad de sección "Por empleado"
+                    binding.cvEmployeesBreakdownCard.isVisible = state.isOwner
+                    if (state.isOwner) {
+                        updateEmployeeBreakdown(state.employeeBreakdown)
+                    }
                 }
             }
+        }
+    }
+
+    private fun updateFilterButtons(selected: TimeFilter) {
+        val context = requireContext()
+        val buttons = mapOf(
+            TimeFilter.TODAY to binding.btnFilterToday,
+            TimeFilter.WEEK to binding.btnFilterWeek,
+            TimeFilter.MONTH to binding.btnFilterMonth
+        )
+
+        buttons.forEach { (filter, button) ->
+            if (filter == selected) {
+                button.setBackgroundColor(ContextCompat.getColor(context, R.color.verde_primario))
+                button.setTextColor(ContextCompat.getColor(context, R.color.blanco))
+                button.strokeWidth = 0
+            } else {
+                button.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent))
+                button.setTextColor(ContextCompat.getColor(context, R.color.texto_principal))
+                button.strokeWidth = (1 * resources.displayMetrics.density).toInt()
+                button.setStrokeColorResource(R.color.borde_tarjeta)
+            }
+        }
+    }
+
+    private fun updateEmployeeBreakdown(breakdown: Map<String, Double>) {
+        binding.layoutEmployeesList.removeAllViews()
+        
+        breakdown.forEach { (name, amount) ->
+            val itemView = RelativeLayout(requireContext()).apply {
+                layoutParams = ViewGroup.MarginLayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ).apply { setMargins(0, 4, 0, 4) }
+            }
+
+            val tvName = TextView(requireContext()).apply {
+                text = name
+                setTextColor(ContextCompat.getColor(context, R.color.texto_principal))
+                textSize = 16f
+            }
+
+            val tvAmount = TextView(requireContext()).apply {
+                text = String.format(Locale.getDefault(), "S/ %.2f", amount)
+                setTextColor(ContextCompat.getColor(context, R.color.verde_primario))
+                textSize = 16f
+                setTypeface(null, android.graphics.Typeface.BOLD)
+                val params = RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
+                ).apply { addRule(RelativeLayout.ALIGN_PARENT_END) }
+                layoutParams = params
+            }
+
+            itemView.addView(tvName)
+            itemView.addView(tvAmount)
+            binding.layoutEmployeesList.addView(itemView)
         }
     }
 

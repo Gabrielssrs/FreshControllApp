@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.freshcontroll.domain.model.Product
 import com.example.freshcontroll.domain.repository.AuthRepository
 import com.example.freshcontroll.domain.repository.StorageRepository
+import com.example.freshcontroll.domain.usecase.inventory.GetProductDetailUseCase
 import com.example.freshcontroll.domain.usecase.inventory.RegisterProductUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +30,7 @@ sealed class RegisterProductUiState {
 @HiltViewModel
 class RegisterProductViewModel @Inject constructor(
     private val registerProductUseCase: RegisterProductUseCase,
+    private val getProductDetailUseCase: GetProductDetailUseCase,
     private val authRepository: AuthRepository,
     private val storageRepository: StorageRepository
 ) : ViewModel() {
@@ -36,9 +38,20 @@ class RegisterProductViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<RegisterProductUiState>(RegisterProductUiState.Idle)
     val uiState: StateFlow<RegisterProductUiState> = _uiState.asStateFlow()
 
+    private val _existingProduct = MutableStateFlow<Product?>(null)
+    val existingProduct: StateFlow<Product?> = _existingProduct.asStateFlow()
+
     // Uri local temporal para la imagen seleccionada de la galería
     private val _selectedImageUri = MutableStateFlow<android.net.Uri?>(null)
     val selectedImageUri: StateFlow<android.net.Uri?> = _selectedImageUri.asStateFlow()
+
+    fun loadProduct(productId: String) {
+        viewModelScope.launch {
+            getProductDetailUseCase(productId).collect { product ->
+                _existingProduct.value = product
+            }
+        }
+    }
 
     fun setImageUri(uri: android.net.Uri?) {
         _selectedImageUri.value = uri

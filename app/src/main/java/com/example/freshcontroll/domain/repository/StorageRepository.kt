@@ -13,4 +13,9 @@ interface StorageRepository {
      * @return Result con la URL de descarga (String) o una excepción.
      */
     suspend fun uploadProductImage(imageUri: Uri, productId: String): Result<String>
+
+    /**
+     * Sube una imagen de perfil de usuario a Firebase Storage y retorna la URL pública.
+     */
+    suspend fun uploadProfileImage(imageUri: Uri, userId: String): Result<String>
 }

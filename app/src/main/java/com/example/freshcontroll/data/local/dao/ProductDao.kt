@@ -23,6 +23,9 @@ interface ProductDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertProduct(product: ProductEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertProducts(products: List<ProductEntity>)
+
     @Query("UPDATE products SET currentStock = :newStock WHERE id = :id")
     suspend fun updateStock(id: String, newStock: Double)
 

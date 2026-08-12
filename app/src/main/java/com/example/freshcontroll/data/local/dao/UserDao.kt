@@ -13,6 +13,9 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(user: UserEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUsers(users: List<UserEntity>)
+
     @Query("SELECT * FROM users WHERE storeId = :storeId AND role = 'EMPLOYEE'")
     fun getEmployees(storeId: String): Flow<List<UserEntity>>
 

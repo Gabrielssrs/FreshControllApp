@@ -5,6 +5,7 @@
     xmlns:tools="http://tools.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/fondo"
     tools:context=".MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
@@ -23,6 +24,13 @@
         android:id="@+id/bottom_nav"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/blanco"
+        android:elevation="16dp"
+        app:elevation="16dp"
+        app:itemIconTint="@color/verde_primario"
+        app:itemTextColor="@color/texto_principal"
+        app:indicatorColor="@color/verde_fondo_suave"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

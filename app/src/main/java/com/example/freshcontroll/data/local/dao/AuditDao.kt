@@ -26,4 +26,7 @@ interface AuditDao {
 
     @Query("UPDATE audit_logs SET isSynced = 1 WHERE id = :id")
     suspend fun markAsSynced(id: String)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAuditLogs(logs: List<AuditLogEntity>)
 }

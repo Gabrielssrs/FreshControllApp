@@ -52,15 +52,27 @@ class AuditDetailFragment : Fragment() {
                         val timeFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
                         binding.tvTimestamp.text = timeFormat.format(Date(it.timestamp))
 
-                        // Estrategia de granularidad: Ocultar vistas sin datos en el modelo
-                        binding.cvBeforeState.isVisible = false
-                        binding.cvTransitionArrow.isVisible = false
-                        binding.cvAfterState.isVisible = false
-                        binding.tvProductName.isVisible = false
-                        binding.tvProductSkuCategory.isVisible = false
+                        // Mostrar estados Antes/Después
+                        binding.cvBeforeState.isVisible = !it.beforeState.isNullOrBlank()
+                        binding.cvTransitionArrow.isVisible = !it.beforeState.isNullOrBlank()
+                        binding.cvAfterState.isVisible = !it.afterState.isNullOrBlank()
+
+                        binding.tvBeforeValue.text = it.beforeState ?: ""
+                        binding.tvBeforeValue.textSize = 18f // Reducimos tamaño para que quepa texto
+                        
+                        binding.tvAfterValue.text = it.afterState ?: ""
+                        binding.tvAfterValue.textSize = 18f
+
+                        // Ocultamos badge de ajuste si no es numérico
+                        binding.cvAdjustmentBadge.isVisible = false
 
                         // Mostrar descripción narrativa
                         binding.tvAuditReason.text = it.description
+                        
+                        // Si es una venta anulada, podemos mostrar info extra si se desea
+                        binding.cvItemDetails.isVisible = true
+                        binding.tvProductName.text = it.title
+                        binding.tvProductSkuCategory.text = "Operación de Auditoría"
                     }
                 }
             }

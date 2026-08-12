@@ -13,6 +13,9 @@ interface CashDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertClose(close: CashRegisterCloseEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCloses(closes: List<CashRegisterCloseEntity>)
+
     @Query("SELECT * FROM cash_register_closes WHERE storeId = :storeId ORDER BY timestamp DESC")
     fun getAllCloses(storeId: String): Flow<List<CashRegisterCloseEntity>>
 

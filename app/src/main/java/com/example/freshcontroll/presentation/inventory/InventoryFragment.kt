@@ -56,7 +56,7 @@ class InventoryFragment : Fragment() {
     private fun setupListeners() {
         // 1. AÑADIR ESTA LÓGICA PARA LA FLECHA DE RETROCESO
         binding.btnBack.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().popBackStack()
         }
 
         // Botón principal flotante para añadir producto (funciona para lista y estado vacío)

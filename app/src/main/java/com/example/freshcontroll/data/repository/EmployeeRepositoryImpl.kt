@@ -45,8 +45,8 @@ class EmployeeRepositoryImpl @Inject constructor(
 
     override suspend fun updateEmployeeAccess(userId: String, hasAccess: Boolean): Result<Unit> = runCatching {
         userDao.updateAccess(userId, hasAccess)
-        // Actualizamos de forma silenciosa el campo remoto
-        runCatching { firestoreService.saveDocument("users", userId, mapOf("hasAccess" to hasAccess)) }
+        // Usamos updateDocument para no borrar el resto de campos (storeId, role, etc.)
+        runCatching { firestoreService.updateDocument("users", userId, mapOf("hasAccess" to hasAccess)) }
     }
 
     override suspend fun updateProfile(userId: String, fullName: String, email: String, phone: String, photoUrl: String?): Result<Unit> = runCatching {
@@ -58,7 +58,7 @@ class EmployeeRepositoryImpl @Inject constructor(
             "phone" to phone,
             "photoUrl" to photoUrl
         )
-        runCatching { firestoreService.saveDocument("users", userId, updateMap) }
+        runCatching { firestoreService.updateDocument("users", userId, updateMap) }
     }
 
 

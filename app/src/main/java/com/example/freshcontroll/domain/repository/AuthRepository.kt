@@ -17,5 +17,9 @@ interface AuthRepository {
 
     suspend fun getCurrentUser(): User?
 
+    fun getStore(storeId: String): kotlinx.coroutines.flow.Flow<Store?>
+
+    suspend fun syncEmployees(storeId: String): Result<Unit>
+
     fun logout()
 }

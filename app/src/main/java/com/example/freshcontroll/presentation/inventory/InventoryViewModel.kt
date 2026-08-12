@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.freshcontroll.domain.model.Product
 import com.example.freshcontroll.domain.repository.AuthRepository
 import com.example.freshcontroll.domain.usecase.inventory.GetProductsUseCase
+import com.example.freshcontroll.domain.usecase.inventory.SyncProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class InventoryViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase,
+    private val syncProductsUseCase: SyncProductsUseCase,
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
@@ -36,7 +39,16 @@ class InventoryViewModel @Inject constructor(
     }
 
     fun loadInventory() {
-        searchProduct(null)
+        viewModelScope.launch {
+            val currentUser = authRepository.getCurrentUser()
+            if (currentUser != null) {
+                // ⚡ Sync en paralelo para no bloquear la vista ⚡
+                viewModelScope.launch(Dispatchers.IO) {
+                    syncProductsUseCase(currentUser.storeId)
+                }
+            }
+            searchProduct(null)
+        }
     }
 
     fun searchProduct(query: String?) {

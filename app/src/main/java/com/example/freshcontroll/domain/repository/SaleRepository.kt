@@ -19,4 +19,8 @@ interface SaleRepository {
     suspend fun registerSale(sale: Sale, details: List<SaleDetail>): Result<Unit>
 
     suspend fun markSaleAsEdited(saleId: String): Result<Unit>
+
+    suspend fun deleteSale(saleId: String): Result<Unit>
+
+    suspend fun syncSales(storeId: String): Result<Unit>
 }

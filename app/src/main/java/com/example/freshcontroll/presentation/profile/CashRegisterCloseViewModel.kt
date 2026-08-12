@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.freshcontroll.domain.repository.AuthRepository
 import com.example.freshcontroll.domain.usecase.profile.CloseCashRegisterUseCase
 import com.example.freshcontroll.domain.usecase.profile.GetSystemCashBalanceUseCase
+import com.example.freshcontroll.domain.usecase.profile.SyncCashClosesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class CashRegisterCloseViewModel @Inject constructor(
     private val getSystemCashBalanceUseCase: GetSystemCashBalanceUseCase,
     private val closeCashRegisterUseCase: CloseCashRegisterUseCase,
+    private val syncCashClosesUseCase: SyncCashClosesUseCase,
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
@@ -36,6 +38,10 @@ class CashRegisterCloseViewModel @Inject constructor(
     fun requestSystemBalance() {
         viewModelScope.launch {
             val currentUser = authRepository.getCurrentUser() ?: return@launch
+            
+            // Sincronización inicial silenciosa
+            syncCashClosesUseCase(currentUser.storeId)
+            
             _systemBalance.value = getSystemCashBalanceUseCase(currentUser.storeId)
         }
     }

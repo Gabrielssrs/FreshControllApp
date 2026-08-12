@@ -72,13 +72,27 @@
             android:id="@+id/tv_sale_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:textColor="@color/texto_principal"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_edit_sale"
             tools:text="$12.50" />
+
+        <ImageView
+            android:id="@+id/iv_edit_sale"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_edit"
+            app:tint="@color/morado_acento"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="Editar venta" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_edited_badge"

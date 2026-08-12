@@ -84,7 +84,7 @@
                 android:layout_height="32dp"
                 android:background="@color/gris_fondo_icono"
                 android:contentDescription="@string/atras"
-                android:src="@drawable/ic_remove_shopping_cart"
+                android:src="@drawable/ic_remove"
                 app:tint="@color/texto_secundario"
                 android:padding="6dp"
                 android:scaleType="fitCenter"/>

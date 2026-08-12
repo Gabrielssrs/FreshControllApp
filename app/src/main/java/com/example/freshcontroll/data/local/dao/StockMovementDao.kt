@@ -13,6 +13,9 @@ interface StockMovementDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovement(movement: StockMovementEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMovements(movements: List<StockMovementEntity>)
+
     @Query("SELECT * FROM stock_movements WHERE productId = :productId ORDER BY timestamp DESC")
     fun getMovementsByProduct(productId: String): Flow<List<StockMovementEntity>>
 

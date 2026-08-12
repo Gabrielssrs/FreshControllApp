@@ -2,10 +2,14 @@ package com.example.freshcontroll.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.freshcontroll.domain.model.UserRole
 import com.example.freshcontroll.domain.repository.AuthRepository
 import com.example.freshcontroll.domain.usecase.home.GetNotificationsUseCase
+import com.example.freshcontroll.domain.usecase.home.GetStoreUseCase
 import com.example.freshcontroll.domain.usecase.sales.GetSalesHistoryUseCase
+import com.example.freshcontroll.domain.usecase.sales.SyncSalesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,6 +27,7 @@ data class DashboardUiState(
     val hayAlertas: Boolean = false,
     val cantidadAlertas: Int = 0,
     val nombreNegocio: String = "",
+    val userRole: UserRole = UserRole.EMPLOYEE,
     val isLoading: Boolean = true
 )
 
@@ -34,6 +39,8 @@ data class DashboardUiState(
 class HomeViewModel @Inject constructor(
     private val getSalesHistoryUseCase: GetSalesHistoryUseCase,
     private val getNotificationsUseCase: GetNotificationsUseCase,
+    private val getStoreUseCase: GetStoreUseCase,
+    private val syncSalesUseCase: SyncSalesUseCase,
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
@@ -53,6 +60,11 @@ class HomeViewModel @Inject constructor(
                 return@launch
             }
 
+            // ⚡ LANZAMOS SYNC EN PARALELO (NO BLOQUEANTE) ⚡
+            viewModelScope.launch(Dispatchers.IO) {
+                syncSalesUseCase(currentUser.storeId)
+            }
+
             // Calculamos el inicio del día actual (medianoche)
             val startOfDay = Calendar.getInstance().apply {
                 set(Calendar.HOUR_OF_DAY, 0)
@@ -67,9 +79,10 @@ class HomeViewModel @Inject constructor(
                 role = currentUser.role
             )
             val alertsFlow = getNotificationsUseCase(currentUser.storeId)
+            val storeFlow = getStoreUseCase(currentUser.storeId)
 
-            // Combinamos ambos flujos reactivos para emitir un solo estado de UI
-            combine(salesFlow, alertsFlow) { sales, alerts ->
+            // Combinamos los flujos reactivos para emitir un solo estado de UI
+            combine(salesFlow, alertsFlow, storeFlow) { sales, alerts, store ->
                 val todaySales = sales.filter { it.timestamp >= startOfDay }
 
                 val totalAmount = todaySales.sumOf { it.total }
@@ -85,7 +98,8 @@ class HomeViewModel @Inject constructor(
                     transaccionesHoy = totalTransactions,
                     hayAlertas = totalAlerts > 0,
                     cantidadAlertas = totalAlerts,
-                    nombreNegocio = "", // Este dato podría provenir de un GetStoreUseCase si se requiere
+                    nombreNegocio = store?.name ?: "",
+                    userRole = currentUser.role,
                     isLoading = false
                 )
             }.collect { newState ->

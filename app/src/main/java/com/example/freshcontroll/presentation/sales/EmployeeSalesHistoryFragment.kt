@@ -14,6 +14,7 @@ import com.example.freshcontroll.databinding.FragmentEmployeeSalesHistoryBinding
 import com.example.freshcontroll.presentation.sales.adapter.EmployeeSaleAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @AndroidEntryPoint
 class EmployeeSalesHistoryFragment : Fragment() {
@@ -29,19 +30,37 @@ class EmployeeSalesHistoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = EmployeeSaleAdapter { findNavController().navigate(EmployeeSalesHistoryFragmentDirections.actionEmployeeSalesHistoryToSaleReceipt(it)) }
-        binding.rvEmployeeSales.adapter = adapter
+        
+        setupListeners()
+        setupAdapter()
+        observeUiState()
+    }
 
+    private fun setupListeners() {
+        binding.btnNewSale.setOnClickListener {
+            findNavController().navigate(EmployeeSalesHistoryFragmentDirections.actionEmployeeSalesHistoryToNewSale())
+        }
+    }
+
+    private fun setupAdapter() {
+        val adapter = EmployeeSaleAdapter(
+            onItemClick = { id -> 
+                findNavController().navigate(EmployeeSalesHistoryFragmentDirections.actionEmployeeSalesHistoryToSaleReceipt(id)) 
+            },
+            onEditClick = { id ->
+                findNavController().navigate(EmployeeSalesHistoryFragmentDirections.actionEmployeeSalesHistoryToEditSale(id))
+            }
+        )
+        binding.rvEmployeeSales.adapter = adapter
+    }
+
+    private fun observeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.personalSales.collect { sales ->
-                    adapter.submitList(sales)
+                    (binding.rvEmployeeSales.adapter as? EmployeeSaleAdapter)?.submitList(sales)
 
-                    // Correcciones aplicadas:
-                    // Usamos tvMyTotalDayAmount (antes tvTotalDay)
-                    binding.tvMyTotalDayAmount.text = "S/ ${sales.sumOf { it.total }}"
-
-                    // Usamos tvSalesPerformedCount (antes tvCount)
+                    binding.tvMyTotalDayAmount.text = String.format(Locale.getDefault(), "S/ %.2f", sales.sumOf { it.total })
                     binding.tvSalesPerformedCount.text = "${sales.size}"
                 }
             }

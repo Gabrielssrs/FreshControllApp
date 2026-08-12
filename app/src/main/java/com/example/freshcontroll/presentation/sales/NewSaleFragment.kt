@@ -64,7 +64,7 @@ class NewSaleFragment : Fragment() {
 
     private fun setupListeners() {
         binding.btnBack.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().popBackStack()
         }
 
         binding.btnScanBarcode.setOnClickListener {

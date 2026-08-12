@@ -14,4 +14,6 @@ interface AuditRepository {
     fun getAuditLogById(id: String): Flow<AuditLog?>
 
     suspend fun insertAuditLog(log: AuditLog)
+
+    suspend fun syncAuditLogs(storeId: String): Result<Unit>
 }

@@ -1,5 +1,6 @@
 package com.example.freshcontroll.data.remote
 
+import com.example.freshcontroll.util.FreshLogger
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
 
@@ -16,8 +17,13 @@ class FirebaseAuthService(
      * @return Result con el UID del usuario si es exitoso, o una excepción si falla.
      */
     suspend fun login(email: String, password: String): Result<String> = runCatching {
+        FreshLogger.network("Auth", "LOGIN", "Email: $email")
         val authResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
-        authResult.user?.uid ?: throw Exception("El UID devuelto por Firebase es nulo.")
+        val uid = authResult.user?.uid ?: throw Exception("El UID devuelto por Firebase es nulo.")
+        FreshLogger.d("Auth", "Login success for UID: $uid")
+        uid
+    }.onFailure {
+        FreshLogger.e("AuthError", "Login failed for $email", it)
     }
 
     /**
@@ -25,15 +31,24 @@ class FirebaseAuthService(
      * @return Result con el UID del nuevo usuario generado.
      */
     suspend fun register(email: String, password: String): Result<String> = runCatching {
+        FreshLogger.network("Auth", "REGISTER", "Email: $email")
         val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-        authResult.user?.uid ?: throw Exception("El UID generado por Firebase es nulo.")
+        val uid = authResult.user?.uid ?: throw Exception("El UID generado por Firebase es nulo.")
+        FreshLogger.d("Auth", "Registration success for UID: $uid")
+        uid
+    }.onFailure {
+        FreshLogger.e("AuthError", "Registration failed for $email", it)
     }
 
     /**
      * Envía un correo electrónico para el restablecimiento de contraseña.
      */
     suspend fun sendPasswordResetEmail(email: String): Result<Unit> = runCatching {
+        FreshLogger.network("Auth", "RESET_PWD", "Email: $email")
         firebaseAuth.sendPasswordResetEmail(email).await()
+        Unit
+    }.onFailure {
+        FreshLogger.e("AuthError", "Reset password email failed for $email", it)
     }
 
     /**

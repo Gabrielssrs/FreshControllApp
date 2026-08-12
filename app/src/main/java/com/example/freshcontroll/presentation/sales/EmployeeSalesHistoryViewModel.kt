@@ -6,7 +6,9 @@ import com.example.freshcontroll.domain.model.Sale
 import com.example.freshcontroll.domain.model.UserRole
 import com.example.freshcontroll.domain.repository.AuthRepository
 import com.example.freshcontroll.domain.usecase.sales.GetSalesHistoryUseCase
+import com.example.freshcontroll.domain.usecase.sales.SyncSalesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EmployeeSalesHistoryViewModel @Inject constructor(
     private val getSalesHistoryUseCase: GetSalesHistoryUseCase,
+    private val syncSalesUseCase: SyncSalesUseCase,
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
@@ -33,6 +36,11 @@ class EmployeeSalesHistoryViewModel @Inject constructor(
     fun fetchPersonalSales() {
         viewModelScope.launch {
             val currentUser = authRepository.getCurrentUser() ?: return@launch
+
+            // ⚡ Sync en paralelo para no bloquear la vista personal ⚡
+            viewModelScope.launch(Dispatchers.IO) {
+                syncSalesUseCase(currentUser.storeId)
+            }
 
             // Forzamos el rol a EMPLOYEE en la llamada al UseCase para garantizar
             // que la capa de dominio aplique el filtro restrictivo por userId,

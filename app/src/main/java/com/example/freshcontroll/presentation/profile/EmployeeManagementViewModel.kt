@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.freshcontroll.domain.model.User
 import com.example.freshcontroll.domain.repository.AuthRepository
 import com.example.freshcontroll.domain.usecase.profile.GetEmployeesUseCase
+import com.example.freshcontroll.domain.usecase.profile.SyncEmployeesUseCase
 import com.example.freshcontroll.domain.usecase.profile.ToggleEmployeeAccessUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class EmployeeManagementViewModel @Inject constructor(
     private val getEmployeesUseCase: GetEmployeesUseCase,
     private val toggleEmployeeAccessUseCase: ToggleEmployeeAccessUseCase,
+    private val syncEmployeesUseCase: SyncEmployeesUseCase,
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
@@ -34,6 +36,9 @@ class EmployeeManagementViewModel @Inject constructor(
     fun loadEmployees() {
         viewModelScope.launch {
             val currentUser = authRepository.getCurrentUser() ?: return@launch
+
+            // Sincronización inicial
+            syncEmployeesUseCase(currentUser.storeId)
 
             getEmployeesUseCase(currentUser.storeId).collect { employees ->
                 _employeeList.value = employees

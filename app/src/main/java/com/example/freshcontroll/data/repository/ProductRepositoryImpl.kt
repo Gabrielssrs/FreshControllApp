@@ -2,6 +2,8 @@ package com.example.freshcontroll.data.repository
 
 import com.example.freshcontroll.data.local.dao.ProductDao
 import com.example.freshcontroll.data.local.dao.StockMovementDao
+import com.example.freshcontroll.data.local.entity.ProductEntity
+import com.example.freshcontroll.data.local.entity.StockMovementEntity
 import com.example.freshcontroll.data.mapper.toDomain
 import com.example.freshcontroll.data.mapper.toDomainList
 import com.example.freshcontroll.data.mapper.toEntity
@@ -152,6 +154,29 @@ class ProductRepositoryImpl @Inject constructor(
         return stockMovementDao.getMovementsByProduct(productId).map { it.toDomainList() }
     }
 
+    override suspend fun syncStockMovements(productId: String): Result<Unit> = runCatching {
+        val remoteMovements = firestoreService.getDocumentsByField("stock_movements", "productId", productId)
+        val entities = remoteMovements.map { map ->
+            StockMovementEntity(
+                id = map["id"] as String,
+                storeId = map["storeId"] as String,
+                productId = map["productId"] as String,
+                productName = map["productName"] as String,
+                previousQuantity = (map["previousQuantity"] as? Number)?.toDouble() ?: 0.0,
+                newQuantity = (map["newQuantity"] as? Number)?.toDouble() ?: 0.0,
+                adjustment = (map["adjustment"] as? Number)?.toDouble() ?: 0.0,
+                reason = map["reason"] as String,
+                timestamp = (map["timestamp"] as? Long) ?: 0L,
+                userId = map["userId"] as String,
+                userName = map["userName"] as String,
+                isSynced = true
+            )
+        }
+        if (entities.isNotEmpty()) {
+            stockMovementDao.insertMovements(entities)
+        }
+    }
+
     override fun getNotifications(storeId: String): Flow<Map<String, List<Product>>> {
         val thirtyDaysInMillis = 30L * 24 * 60 * 60 * 1000
         val threshold = System.currentTimeMillis() + thirtyDaysInMillis
@@ -166,6 +191,36 @@ class ProductRepositoryImpl @Inject constructor(
                 "expiring" to expiring.toDomainList(),
                 "lowStock" to lowStock.toDomainList()
             )
+        }
+    }
+
+    override suspend fun syncProducts(storeId: String): Result<Unit> = runCatching {
+        // 1. Obtener productos de Firestore para esta tienda
+        val remoteProducts = firestoreService.getDocumentsByField("products", "storeId", storeId)
+        
+        // 2. Mapear a entidades de Room
+        val entities = remoteProducts.map { map ->
+            ProductEntity(
+                id = map["id"] as String,
+                storeId = map["storeId"] as String,
+                barcode = map["barcode"] as? String,
+                name = map["name"] as String,
+                category = map["category"] as String,
+                sku = map["sku"] as String,
+                currentStock = (map["currentStock"] as? Number)?.toDouble() ?: 0.0,
+                minStock = (map["minStock"] as? Number)?.toDouble() ?: 0.0,
+                unitType = map["unitType"] as String,
+                price = (map["price"] as? Number)?.toDouble() ?: 0.0,
+                costPrice = (map["costPrice"] as? Number)?.toDouble() ?: 0.0,
+                expirationDate = map["expirationDate"] as? Long,
+                imageUrl = map["imageUrl"] as? String,
+                isSynced = true
+            )
+        }
+
+        // 3. Guardar en Room (Reemplaza si ya existen)
+        if (entities.isNotEmpty()) {
+            productDao.insertProducts(entities)
         }
     }
 }

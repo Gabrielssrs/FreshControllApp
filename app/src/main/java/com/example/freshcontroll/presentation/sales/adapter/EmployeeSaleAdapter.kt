@@ -12,8 +12,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class EmployeeSaleAdapter(private val onItemClick: (String) -> Unit) :
-    ListAdapter<Sale, EmployeeSaleAdapter.ViewHolder>(DiffCallback()) {
+class EmployeeSaleAdapter(
+    private val onItemClick: (String) -> Unit,
+    private val onEditClick: (String) -> Unit
+) : ListAdapter<Sale, EmployeeSaleAdapter.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         ItemEmployeeSaleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -23,16 +25,16 @@ class EmployeeSaleAdapter(private val onItemClick: (String) -> Unit) :
 
     inner class ViewHolder(private val binding: ItemEmployeeSaleBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Sale) {
-            binding.tvSaleNumber.text = "Venta #${item.id}"
-            binding.tvSaleAmount.text = "S/ ${item.total}"
+            binding.tvSaleNumber.text = "Venta #${item.ticketNumber}"
+            binding.tvSaleAmount.text = String.format("S/ %.2f", item.total)
 
-            // 2. CORRIGE ESTA SECCIÓN PARA EL TIMESTAMP:
             val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
             binding.tvSaleTime.text = timeFormat.format(Date(item.timestamp))
 
             binding.cvEditedBadge.isVisible = item.isEdited
 
             binding.root.setOnClickListener { onItemClick(item.id) }
+            binding.ivEditSale.setOnClickListener { onEditClick(item.id) }
         }
     }
 

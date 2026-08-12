@@ -12,6 +12,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.freshcontroll.R
 import com.example.freshcontroll.databinding.FragmentHomeBinding
+import com.example.freshcontroll.domain.model.UserRole
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -40,8 +42,13 @@ class HomeFragment : Fragment() {
     private fun setupListeners() {
         // CORRECCIÓN: btnRevisarAhora en lugar de btnNotifications
         binding.btnRevisarAhora.setOnClickListener {
-            val action = HomeFragmentDirections.actionHomeToNotifications()
-            findNavController().navigate(action)
+            val userRole = viewModel.uiState.value.userRole
+            if (userRole == UserRole.OWNER) {
+                val action = HomeFragmentDirections.actionHomeToNotifications()
+                findNavController().navigate(action)
+            } else {
+                showAdminOnlyMessage()
+            }
         }
 
         // CORRECCIÓN: btnNuevaVenta en lugar de btnNewSale
@@ -52,27 +59,41 @@ class HomeFragment : Fragment() {
 
         // CORRECCIÓN: cvRegistrarProducto en lugar de btnRegisterProduct
         binding.cvRegistrarProducto.setOnClickListener {
-            val action = HomeFragmentDirections.actionHomeToRegisterProduct()
-            findNavController().navigate(action)
+            val userRole = viewModel.uiState.value.userRole
+            if (userRole == UserRole.OWNER) {
+                val action = HomeFragmentDirections.actionHomeToRegisterProduct()
+                findNavController().navigate(action)
+            } else {
+                showAdminOnlyMessage()
+            }
         }
 
         // CORRECCIÓN: cvInventario en lugar de btnInventory
         binding.cvInventario.setOnClickListener {
-            findNavController().navigate(R.id.inventoryFragment)
+            val action = HomeFragmentDirections.actionHomeToInventory()
+            findNavController().navigate(action)
         }
 
         binding.cvAddEmployee.setOnClickListener {
-            findNavController().navigate(R.id.addEmployeeFragment)
+            val userRole = viewModel.uiState.value.userRole
+            if (userRole == UserRole.OWNER) {
+                findNavController().navigate(R.id.addEmployeeFragment)
+            } else {
+                showAdminOnlyMessage()
+            }
         }
 
-        binding.btnProfile.setOnClickListener {
-            findNavController().navigate(R.id.profileFragment)
+        binding.cvMisVentas.setOnClickListener {
+            findNavController().navigate(R.id.employeeSalesHistoryFragment)
         }
+    }
 
-        // CORRECCIÓN: cvBuscar en lugar de btnSearch
-        binding.cvBuscar.setOnClickListener {
-            // TODO: Implementar navegación a Búsqueda cuando la pantalla esté asignada
-        }
+    private fun showAdminOnlyMessage() {
+        Snackbar.make(
+            binding.root,
+            "Acceso solo para Administradores",
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
     private fun observeUiState() {
@@ -82,6 +103,7 @@ class HomeFragment : Fragment() {
                     // CORRECCIÓN: tvVentasHoyMonto y tvTransaccionesNumero
                     binding.tvVentasHoyMonto.text = String.format("S/ %.2f", state.ventasDelDia)
                     binding.tvTransaccionesNumero.text = state.transaccionesHoy.toString()
+                    binding.tvHeaderTitle.text = if (state.nombreNegocio.isBlank()) "FreshControl" else state.nombreNegocio
 
                     // Manejo del panel/badge de alertas
                     if (state.hayAlertas) {

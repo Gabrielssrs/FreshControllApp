@@ -17,12 +17,6 @@ import androidx.room.PrimaryKey
             parentColumns = ["id"],
             childColumns = ["storeId"],
             onDelete = ForeignKey.CASCADE
-        ),
-        ForeignKey(
-            entity = UserEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["userId"],
-            onDelete = ForeignKey.NO_ACTION // Si se elimina el usuario, la venta se mantiene por historial
         )
     ],
     indices = [Index("storeId"), Index("userId")]

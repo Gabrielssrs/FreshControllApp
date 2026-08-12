@@ -20,6 +20,9 @@
         <action
             android:id="@+id/action_home_to_registerProduct"
             app:destination="@id/registerProductFragment" />
+        <action
+            android:id="@+id/action_home_to_inventory"
+            app:destination="@id/inventoryFragment" />
     </fragment>
 
     <fragment
@@ -159,6 +162,9 @@
         <action
             android:id="@+id/action_salesHistory_to_saleReceipt"
             app:destination="@id/saleReceiptFragment" />
+        <action
+            android:id="@+id/action_salesHistory_to_editSale"
+            app:destination="@id/editSaleFragment" />
     </fragment>
 
     <fragment
@@ -169,6 +175,12 @@
         <action
             android:id="@+id/action_employeeSalesHistory_to_saleReceipt"
             app:destination="@id/saleReceiptFragment" />
+        <action
+            android:id="@+id/action_employeeSalesHistory_to_editSale"
+            app:destination="@id/editSaleFragment" />
+        <action
+            android:id="@+id/action_employeeSalesHistory_to_newSale"
+            app:destination="@id/newSaleFragment" />
     </fragment>
 
     <fragment
@@ -182,6 +194,20 @@
         <action
             android:id="@+id/action_newSale_to_saleReceipt"
             app:destination="@id/saleReceiptFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editSaleFragment"
+        android:name="com.example.freshcontroll.presentation.sales.EditSaleFragment"
+        android:label="Editar Venta"
+        tools:layout="@layout/fragment_new_sale">
+        <argument
+            android:name="saleId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_editSale_to_saleReceipt"
+            app:destination="@id/saleReceiptFragment"
+            app:popUpTo="@id/homeFragment" />
     </fragment>
 
     <fragment

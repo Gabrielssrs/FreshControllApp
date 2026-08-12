@@ -50,7 +50,7 @@ class EmployeeManagementFragment : Fragment() {
 
         // Navegación: Botón atrás (Añadido)
         binding.btnBack.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().popBackStack()
         }
     }
 

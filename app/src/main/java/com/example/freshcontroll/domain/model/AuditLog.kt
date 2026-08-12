@@ -20,5 +20,7 @@ data class AuditLog(
     val description: String,
     val timestamp: Long,
     val userId: String,
-    val userName: String
+    val userName: String,
+    val beforeState: String? = null, // Estado anterior (ej. JSON del producto/venta)
+    val afterState: String? = null   // Estado posterior (ej. vacío o editado)
 )

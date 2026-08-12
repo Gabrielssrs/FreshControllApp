@@ -1,6 +1,7 @@
 package com.example.freshcontroll.data.repository
 
 import com.example.freshcontroll.data.local.dao.AuditDao
+import com.example.freshcontroll.data.local.entity.AuditLogEntity
 import com.example.freshcontroll.data.mapper.toDomain
 import com.example.freshcontroll.data.mapper.toDomainList
 import com.example.freshcontroll.data.mapper.toEntity
@@ -34,7 +35,9 @@ class AuditRepositoryImpl @Inject constructor(
             "description" to log.description,
             "timestamp" to log.timestamp,
             "userId" to log.userId,
-            "userName" to log.userName
+            "userName" to log.userName,
+            "beforeState" to log.beforeState,
+            "afterState" to log.afterState
         )
 
         runCatching {
@@ -42,5 +45,29 @@ class AuditRepositoryImpl @Inject constructor(
                 auditDao.markAsSynced(log.id)
             }
         } // Atrapamos de manera silenciosa si falla por red
+    }
+
+    override suspend fun syncAuditLogs(storeId: String): Result<Unit> = runCatching {
+        val remoteLogs = firestoreService.getDocumentsByField("audit_logs", "storeId", storeId)
+        
+        val entities = remoteLogs.map { map ->
+            AuditLogEntity(
+                id = map["id"] as String,
+                storeId = map["storeId"] as String,
+                eventType = map["eventType"] as String,
+                title = map["title"] as String,
+                description = map["description"] as String,
+                timestamp = (map["timestamp"] as? Number)?.toLong() ?: 0L,
+                userId = map["userId"] as String,
+                userName = map["userName"] as String,
+                beforeState = map["beforeState"] as? String,
+                afterState = map["afterState"] as? String,
+                isSynced = true
+            )
+        }
+
+        if (entities.isNotEmpty()) {
+            auditDao.insertAuditLogs(entities)
+        }
     }
 }

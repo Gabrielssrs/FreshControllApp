@@ -17,12 +17,6 @@ import androidx.room.PrimaryKey
             parentColumns = ["id"],
             childColumns = ["storeId"],
             onDelete = ForeignKey.CASCADE
-        ),
-        ForeignKey(
-            entity = UserEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["userId"],
-            onDelete = ForeignKey.NO_ACTION
         )
     ],
     indices = [Index("storeId"), Index("userId")]
@@ -36,5 +30,7 @@ data class AuditLogEntity(
     val timestamp: Long,
     val userId: String,
     val userName: String,
+    val beforeState: String? = null,
+    val afterState: String? = null,
     val isSynced: Boolean = false
 )

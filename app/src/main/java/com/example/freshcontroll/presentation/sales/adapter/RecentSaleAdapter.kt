@@ -9,8 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.freshcontroll.databinding.ItemRecentSaleBinding
 import com.example.freshcontroll.domain.model.Sale
 
-class RecentSaleAdapter(private val onItemClick: (String) -> Unit) :
-    ListAdapter<Sale, RecentSaleAdapter.ViewHolder>(DiffCallback()) {
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
+class RecentSaleAdapter(
+    private val onItemClick: (String) -> Unit,
+    private val onEditClick: (String) -> Unit
+) : ListAdapter<Sale, RecentSaleAdapter.ViewHolder>(DiffCallback()) {
+
+    private val dateFormat = SimpleDateFormat("HH:mm – dd/MM", Locale.getDefault())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         ItemRecentSaleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -19,16 +27,19 @@ class RecentSaleAdapter(private val onItemClick: (String) -> Unit) :
 
     inner class ViewHolder(private val binding: ItemRecentSaleBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Sale) {
-            // Unificamos la información en el campo único del XML
-            binding.tvSaleTimeAndEmployee.text = "${item.timestamp} – ${item.userName}"
+            val dateStr = dateFormat.format(Date(item.timestamp))
+            binding.tvSaleTimeAndEmployee.text = "Venta #${item.ticketNumber} – $dateStr"
 
-            // Usamos el ID correcto para el monto
-            binding.tvSaleAmount.text = "S/ ${item.total}"
+            binding.tvSaleAmount.text = String.format("S/ %.2f", item.total)
+            
+            // Usamos el campo de pago para el nombre del empleado si es dueño
+            binding.tvSalePaymentMethod.text = "Atendido por: ${item.userName}"
+            binding.tvSalePaymentMethod.isVisible = true
 
-            // Usamos el ID correcto para el badge
             binding.cvEditedBadge.isVisible = item.isEdited
 
             binding.root.setOnClickListener { onItemClick(item.id) }
+            binding.ivEditSale.setOnClickListener { onEditClick(item.id) }
         }
     }
     class DiffCallback : DiffUtil.ItemCallback<Sale>() {

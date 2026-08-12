@@ -53,7 +53,7 @@ class AdjustStockFragment : Fragment() {
 
     private fun setupListeners() {
         binding.btnBack.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().popBackStack()
         }
 
         // --- Listeners para las tarjetas de motivos de ajuste ---
@@ -154,7 +154,7 @@ class AdjustStockFragment : Fragment() {
                 launch {
                     viewModel.adjustmentSuccess.collect { isSuccess ->
                         when (isSuccess) {
-                            true -> findNavController().navigateUp()
+                            true -> findNavController().popBackStack()
                             false -> Snackbar.make(binding.root, "Error al ajustar el stock", Snackbar.LENGTH_LONG).show()
                             null -> { /* Idle */ }
                         }

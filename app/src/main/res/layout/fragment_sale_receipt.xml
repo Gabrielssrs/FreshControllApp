@@ -24,12 +24,12 @@
             app:layout_constraintEnd_toEndOf="parent">
 
             <ImageButton
-                android:id="@+id/btn_menu"
+                android:id="@+id/btn_back"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/menu"
-                android:src="@drawable/btn_menu"
+                android:contentDescription="@string/atras"
+                android:src="@drawable/ic_arrow_back"
                 app:tint="@color/verde_primario"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -40,13 +40,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@string/nombre_app"
+                android:text="Resumen"
                 android:textColor="@color/verde_primario"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btn_menu" />
+                app:layout_constraintStart_toEndOf="@id/btn_back" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_header_profile_avatar"
@@ -177,7 +177,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_confirm_sale"
+            android:id="@+id/btn_new_sale"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -194,23 +194,39 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_view_receipt"
+            android:id="@+id/btn_finish_sale"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_marginHorizontal="16dp"
             android:minHeight="48dp"
-            android:text="@string/ver_recibo"
+            android:text="Finalizar Venta"
             android:textSize="18sp"
             android:textAllCaps="false"
             android:textColor="@color/morado_acento"
             app:strokeColor="@color/morado_acento"
             app:strokeWidth="1dp"
-            app:icon="@drawable/ic_receipt_long"
-            app:iconTint="@color/morado_acento"
             app:cornerRadius="8dp"
-            app:layout_constraintTop_toBottomOf="@id/btn_confirm_sale"
+            app:layout_constraintTop_toBottomOf="@id/btn_new_sale"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_view_receipt"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="16dp"
+            android:minHeight="48dp"
+            android:text="@string/ver_recibo"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:textColor="@color/texto_secundario"
+            app:icon="@drawable/ic_receipt_long"
+            app:iconTint="@color/texto_secundario"
+            app:layout_constraintTop_toBottomOf="@id/btn_finish_sale"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -298,6 +314,21 @@
             app:layout_constraintBaseline_toBaselineOf="@id/tv_taxes_label"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="$0.00" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_void_sale"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="Anular Venta"
+            android:textColor="@color/error"
+            app:strokeColor="@color/error"
+            app:strokeWidth="1dp"
+            app:cornerRadius="8dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_taxes_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
