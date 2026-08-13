@@ -27,6 +27,7 @@ class AddEmployeeFragment : Fragment() {
     // Mapeo inicial a EMPLOYEE
     private var selectedRole: UserRole = UserRole.EMPLOYEE
     private var currentPassword: String? = null
+    private var currentEmail: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentAddEmployeeBinding.inflate(inflater, container, false)
@@ -72,14 +73,30 @@ class AddEmployeeFragment : Fragment() {
                 phone = phone,
                 role = selectedRole
             )
+            // Guardamos el email para mostrarlo y copiarlo después
+            currentEmail = email
         }
 
-        // Lógica de copia movida fuera del collect
+        // Lógica de copia: incluye email y contraseña
         binding.btnCopyShare.setOnClickListener {
-            currentPassword?.let { pass ->
+            if (currentEmail != null && currentPassword != null) {
+                val fullCredentials = "Credenciales FreshControll:\n" +
+                        "Correo: $currentEmail\n" +
+                        "Contraseña: $currentPassword"
+                
                 val clip = (requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
-                clip.setPrimaryClip(ClipData.newPlainText("Password", pass))
+                clip.setPrimaryClip(ClipData.newPlainText("FreshControll Credentials", fullCredentials))
+                
+                com.google.android.material.snackbar.Snackbar.make(
+                    binding.root, 
+                    "Copiado al portapapeles", 
+                    com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
+                ).show()
             }
+        }
+
+        binding.btnFinishAndBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 
@@ -107,8 +124,15 @@ class AddEmployeeFragment : Fragment() {
                         currentPassword = it
                         binding.cvTempPassword.isVisible = true
                         binding.tvGeneratedPassword.text = it
-                        // Opcional: Ocultar botón de crear tras el éxito para evitar duplicados
-                        binding.btnSubmitEmployee.isEnabled = false
+                        binding.tvDisplayEmail.text = currentEmail
+                        
+                        // Ocultamos las tarjetas de entrada y el botón principal
+                        binding.cvEmployeeDetails.isVisible = false
+                        binding.cvUserRole.isVisible = false
+                        binding.btnSubmitEmployee.isVisible = false
+                        
+                        // Cambiamos el título para confirmar el éxito
+                        binding.tvHeaderTitle.text = "¡Empleado Creado!"
                     }
                 }
             }

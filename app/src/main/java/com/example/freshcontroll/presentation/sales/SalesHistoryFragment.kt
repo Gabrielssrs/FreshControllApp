@@ -111,7 +111,8 @@ class SalesHistoryFragment : Fragment() {
         binding.layoutEmployeesList.removeAllViews()
         
         breakdown.forEach { (name, amount) ->
-            val itemView = RelativeLayout(requireContext()).apply {
+            val itemView = android.widget.LinearLayout(requireContext()).apply {
+                orientation = android.widget.LinearLayout.HORIZONTAL
                 layoutParams = ViewGroup.MarginLayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
@@ -121,19 +122,25 @@ class SalesHistoryFragment : Fragment() {
             val tvName = TextView(requireContext()).apply {
                 text = name
                 setTextColor(ContextCompat.getColor(context, R.color.texto_principal))
-                textSize = 16f
+                textSize = 15f
+                maxLines = 1
+                ellipsize = android.text.TextUtils.TruncateAt.END
+                layoutParams = android.widget.LinearLayout.LayoutParams(
+                    0,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    1f
+                )
             }
 
             val tvAmount = TextView(requireContext()).apply {
                 text = String.format(Locale.getDefault(), "S/ %.2f", amount)
                 setTextColor(ContextCompat.getColor(context, R.color.verde_primario))
-                textSize = 16f
+                textSize = 15f
                 setTypeface(null, android.graphics.Typeface.BOLD)
-                val params = RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-                ).apply { addRule(RelativeLayout.ALIGN_PARENT_END) }
-                layoutParams = params
+                layoutParams = android.widget.LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ).apply { marginStart = (8 * resources.displayMetrics.density).toInt() }
             }
 
             itemView.addView(tvName)

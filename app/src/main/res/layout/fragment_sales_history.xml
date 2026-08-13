@@ -198,55 +198,24 @@
                         android:layout_marginTop="4dp"
                         android:background="@color/borde_tarjeta" />
 
-                    <LinearLayout
-                        android:id="@+id/layout_employees_list"
+                    <androidx.core.widget.NestedScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="6dp">
+                        android:layout_height="110dp"
+                        android:layout_marginTop="8dp"
+                        android:fadeScrollbars="false"
+                        android:scrollbarSize="3dp"
+                        android:scrollbars="vertical">
 
-                        <RelativeLayout
+                        <LinearLayout
+                            android:id="@+id/layout_employees_list"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginVertical="2dp">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tool:text="Ana"
-                                android:textColor="@color/texto_principal"
-                                android:textSize="16sp" />
-                            <TextView
-                                android:id="@+id/tv_amount_employee_one"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:textColor="@color/verde_primario"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                tools:text="$2,100" />
-                        </RelativeLayout>
+                            android:orientation="vertical">
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginVertical="2dp">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tool:text="Jose"
-                                android:textColor="@color/texto_principal"
-                                android:textSize="16sp" />
-                            <TextView
-                                android:id="@+id/tv_amount_employee_two"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:textColor="@color/verde_primario"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                tools:text="$2,420" />
-                        </RelativeLayout>
-                    </LinearLayout>
+                            <!-- Los items se cargan dinámicamente -->
+
+                        </LinearLayout>
+                    </androidx.core.widget.NestedScrollView>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
