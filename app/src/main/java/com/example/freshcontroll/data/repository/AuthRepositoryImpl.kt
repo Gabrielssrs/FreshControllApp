@@ -164,8 +164,9 @@ class AuthRepositoryImpl @Inject constructor(
             storeDao.markAsSynced(store.id)
         }
 
-        // 4. Sincronizar User a Firestore
+        // 4. Sincronizar User a Firestore (USAMOS getOrThrow para asegurar que se guarde)
         val userMap = mapOf(
+            "id" to finalUser.id, // Aseguramos que el ID vaya en el mapa
             "storeId" to finalUser.storeId,
             "fullName" to finalUser.fullName,
             "email" to finalUser.email,
@@ -174,9 +175,8 @@ class AuthRepositoryImpl @Inject constructor(
             "hasAccess" to finalUser.hasAccess,
             "photoUrl" to finalUser.photoUrl
         )
-        firestoreService.saveDocument("users", finalUser.id, userMap).onSuccess {
-            userDao.markAsSynced(finalUser.id)
-        }
+        firestoreService.saveDocument("users", finalUser.id, userMap).getOrThrow()
+        userDao.markAsSynced(finalUser.id)
     }
 
     override suspend fun sendPasswordResetEmail(email: String): Result<Unit> {
