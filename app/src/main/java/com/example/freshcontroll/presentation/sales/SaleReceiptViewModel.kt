@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.freshcontroll.domain.model.Sale
 import com.example.freshcontroll.domain.model.SaleDetail
+import com.example.freshcontroll.domain.usecase.sales.FinalizeSaleUseCase
 import com.example.freshcontroll.domain.usecase.sales.GetSaleReceiptUseCase
 import com.example.freshcontroll.domain.usecase.sales.VoidSaleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SaleReceiptViewModel @Inject constructor(
     private val getSaleReceiptUseCase: GetSaleReceiptUseCase,
-    private val voidSaleUseCase: VoidSaleUseCase
+    private val voidSaleUseCase: VoidSaleUseCase,
+    private val finalizeSaleUseCase: FinalizeSaleUseCase
 ) : ViewModel() {
 
     private val _receiptData = MutableStateFlow<Pair<Sale, List<SaleDetail>>?>(null)
@@ -32,9 +34,19 @@ class SaleReceiptViewModel @Inject constructor(
     private val _voidEvent = MutableSharedFlow<Result<Unit>>()
     val voidEvent: SharedFlow<Result<Unit>> = _voidEvent.asSharedFlow()
 
+    private val _finalizeEvent = MutableSharedFlow<Result<Unit>>()
+    val finalizeEvent: SharedFlow<Result<Unit>> = _finalizeEvent.asSharedFlow()
+
     fun fetchReceipt(saleId: String) {
         viewModelScope.launch {
             _receiptData.value = getSaleReceiptUseCase(saleId)
+        }
+    }
+
+    fun finalizeSale(saleId: String) {
+        viewModelScope.launch {
+            val result = finalizeSaleUseCase(saleId)
+            _finalizeEvent.emit(result)
         }
     }
 

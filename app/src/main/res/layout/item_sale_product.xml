@@ -110,6 +110,18 @@
                 android:padding="6dp"
                 android:scaleType="fitCenter"/>
 
+            <TextView
+                android:id="@+id/tv_stock_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Límite stock"
+                android:textColor="@color/rojo_fondo_alerta"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
         </LinearLayout>
 
         <TextView

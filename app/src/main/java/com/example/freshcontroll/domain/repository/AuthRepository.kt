@@ -21,5 +21,7 @@ interface AuthRepository {
 
     suspend fun syncEmployees(storeId: String): Result<Unit>
 
+    suspend fun updateFcmToken(userId: String, token: String?): Result<Unit>
+
     fun logout()
 }

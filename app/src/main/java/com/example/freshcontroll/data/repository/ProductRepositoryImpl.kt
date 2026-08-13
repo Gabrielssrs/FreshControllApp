@@ -148,6 +148,11 @@ class ProductRepositoryImpl @Inject constructor(
         firestoreService.saveDocument("stock_movements", movement.id, movementMap).onSuccess {
             stockMovementDao.markAsSynced(movement.id)
         }
+
+        // ⚡ CORRECCIÓN CRÍTICA: Sincronizar el nuevo stock en la colección de productos de Firestore ⚡
+        runCatching {
+            firestoreService.updateDocument("products", movement.productId, mapOf("currentStock" to movement.newQuantity))
+        }
     }
 
     override fun getProductMovements(productId: String): Flow<List<StockMovement>> {
@@ -198,10 +203,16 @@ class ProductRepositoryImpl @Inject constructor(
         // 1. Obtener productos de Firestore para esta tienda
         val remoteProducts = firestoreService.getDocumentsByField("products", "storeId", storeId)
         
-        // 2. Mapear a entidades de Room
-        val entities = remoteProducts.map { map ->
+        // 2. Obtener IDs de productos con cambios locales pendientes (no sincronizados)
+        val unsyncedProductIds = productDao.getUnsyncedProducts(storeId).map { it.id }.toSet()
+
+        // 3. Mapear a entidades de Room, EXCLUYENDO los que tienen cambios pendientes localmente
+        val entities = remoteProducts.mapNotNull { map ->
+            val id = map["id"] as String
+            if (unsyncedProductIds.contains(id)) return@mapNotNull null // No sobreescribir cambios locales
+
             ProductEntity(
-                id = map["id"] as String,
+                id = id,
                 storeId = map["storeId"] as String,
                 barcode = map["barcode"] as? String,
                 name = map["name"] as String,
@@ -212,13 +223,13 @@ class ProductRepositoryImpl @Inject constructor(
                 unitType = map["unitType"] as String,
                 price = (map["price"] as? Number)?.toDouble() ?: 0.0,
                 costPrice = (map["costPrice"] as? Number)?.toDouble() ?: 0.0,
-                expirationDate = map["expirationDate"] as? Long,
+                expirationDate = (map["expirationDate"] as? Number)?.toLong(),
                 imageUrl = map["imageUrl"] as? String,
                 isSynced = true
             )
         }
 
-        // 3. Guardar en Room (Reemplaza si ya existen)
+        // 4. Guardar en Room
         if (entities.isNotEmpty()) {
             productDao.insertProducts(entities)
         }

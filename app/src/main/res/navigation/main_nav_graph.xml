@@ -208,6 +208,9 @@
             android:id="@+id/action_editSale_to_saleReceipt"
             app:destination="@id/saleReceiptFragment"
             app:popUpTo="@id/homeFragment" />
+        <action
+            android:id="@+id/action_editSale_to_barcodeScanner"
+            app:destination="@id/barcodeScannerFragment" />
     </fragment>
 
     <fragment
@@ -224,6 +227,12 @@
             android:id="@+id/action_saleReceipt_to_newSale"
             app:destination="@id/newSaleFragment"
             app:popUpTo="@id/homeFragment" />
+
+        <action
+            android:id="@+id/action_saleReceipt_to_editSale"
+            app:destination="@id/editSaleFragment"
+            app:popUpTo="@id/saleReceiptFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

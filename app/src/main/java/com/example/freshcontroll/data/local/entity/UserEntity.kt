@@ -30,5 +30,6 @@ data class UserEntity(
     val role: String, // "OWNER" o "EMPLOYEE"
     val hasAccess: Boolean,
     val photoUrl: String?,
+    val fcmToken: String? = null,
     val isSynced: Boolean = false
 )

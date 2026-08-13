@@ -16,7 +16,8 @@ fun UserEntity.toDomain(): User {
         phone = this.phone,
         role = safeRole,
         hasAccess = this.hasAccess,
-        photoUrl = this.photoUrl
+        photoUrl = this.photoUrl,
+        fcmToken = this.fcmToken
     )
 }
 
@@ -30,6 +31,7 @@ fun User.toEntity(isSynced: Boolean = false): UserEntity {
         role = this.role.name, // Convertimos el Enum a String
         hasAccess = this.hasAccess,
         photoUrl = this.photoUrl,
+        fcmToken = this.fcmToken,
         isSynced = isSynced
     )
 }

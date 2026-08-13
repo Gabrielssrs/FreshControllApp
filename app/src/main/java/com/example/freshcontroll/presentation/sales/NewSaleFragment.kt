@@ -91,8 +91,8 @@ class NewSaleFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch { 
-                    viewModel.currentCart.collect { 
-                        adapter.submitList(it.toList()) 
+                    viewModel.cartUiModels.collect { 
+                        adapter.submitList(it) 
                         binding.tvCartCountLabel.text = "Artículos (${it.size})"
                     } 
                 }
@@ -113,6 +113,13 @@ class NewSaleFragment : Fragment() {
                     saleId?.let {
                         findNavController().navigate(NewSaleFragmentDirections.actionNewSaleToSaleReceipt(it))
                         viewModel.clearCompletedEvent()
+                    }
+                }}
+
+                launch { viewModel.errorEvent.collect { error ->
+                    error?.let {
+                        com.google.android.material.snackbar.Snackbar.make(binding.root, it, com.google.android.material.snackbar.Snackbar.LENGTH_LONG).show()
+                        viewModel.clearErrorEvent()
                     }
                 }}
             }

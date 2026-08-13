@@ -146,7 +146,7 @@ class BarcodeScannerFragment : Fragment() {
                         lastScannedBarcode = barcodeValue
 
                         // CORRECCIÓN DE FLUJO: Evaluamos quién llamó al escáner
-                        if (args.caller == "newSale") {
+                        if (args.caller == "newSale" || args.caller == "editSale") {
                             returnBarcodeToPreviousScreen(barcodeValue)
                         } else {
                             viewModel.processBarcode(barcodeValue)

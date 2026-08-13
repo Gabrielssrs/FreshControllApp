@@ -19,5 +19,6 @@ data class User(
     val phone: String,
     val role: UserRole,
     val hasAccess: Boolean,
-    val photoUrl: String?
+    val photoUrl: String?,
+    val fcmToken: String? = null
 )

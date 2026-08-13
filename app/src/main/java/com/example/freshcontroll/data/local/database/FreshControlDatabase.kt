@@ -35,7 +35,7 @@ import com.example.freshcontroll.data.local.entity.UserEntity
         AuditLogEntity::class,
         CashRegisterCloseEntity::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class FreshControlDatabase : RoomDatabase() {

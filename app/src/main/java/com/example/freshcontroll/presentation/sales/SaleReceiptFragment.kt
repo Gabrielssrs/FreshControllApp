@@ -47,9 +47,10 @@ class SaleReceiptFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        // Botón atrás: Volver al Inicio
+        // Botón atrás: Volver a la pantalla de edición para permitir ajustes
         binding.btnBack.setOnClickListener {
-            navigateToHome()
+            val action = SaleReceiptFragmentDirections.actionSaleReceiptToEditSale(args.saleId)
+            findNavController().navigate(action)
         }
 
         // Nueva Venta: Reiniciar flujo de venta
@@ -61,12 +62,12 @@ class SaleReceiptFragment : Fragment() {
             )
         }
 
-        // Finalizar Venta: Confirmación simple
+        // Finalizar Venta: Aplicar descuento de stock oficial
         binding.btnFinishSale.setOnClickListener {
             showConfirmationDialog(
                 title = "Finalizar Venta",
-                message = "¿Desea finalizar el proceso de esta venta?",
-                onConfirm = { navigateToHome() }
+                message = "¿Desea finalizar el proceso? Esto descontará los productos del inventario.",
+                onConfirm = { viewModel.finalizeSale(args.saleId) }
             )
         }
 
@@ -100,6 +101,17 @@ class SaleReceiptFragment : Fragment() {
                             binding.tvSoldItemsSection.text = "Artículos Vendidos ($itemCount)"
 
                             soldAdapter.submitList(details.toList())
+                        }
+                    }
+                }
+
+                launch {
+                    viewModel.finalizeEvent.collectLatest { result ->
+                        result.onSuccess {
+                            Snackbar.make(binding.root, "Venta finalizada e inventario actualizado", Snackbar.LENGTH_SHORT).show()
+                            navigateToHome()
+                        }.onFailure {
+                            Snackbar.make(binding.root, "Error al finalizar venta", Snackbar.LENGTH_LONG).show()
                         }
                     }
                 }

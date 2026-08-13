@@ -28,6 +28,9 @@ interface UserDao {
     @Query("UPDATE users SET hasAccess = :hasAccess WHERE id = :id")
     suspend fun updateAccess(id: String, hasAccess: Boolean)
 
+    @Query("UPDATE users SET fcmToken = :token WHERE id = :id")
+    suspend fun updateFcmToken(id: String, token: String?)
+
     @Query("UPDATE users SET fullName = :fullName, email = :email, phone = :phone, photoUrl = :photoUrl WHERE id = :id")
     suspend fun updateProfile(id: String, fullName: String, email: String, phone: String, photoUrl: String?)
 

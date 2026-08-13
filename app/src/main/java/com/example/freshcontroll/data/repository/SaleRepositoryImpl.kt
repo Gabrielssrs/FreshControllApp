@@ -1,5 +1,6 @@
 package com.example.freshcontroll.data.repository
 
+import com.example.freshcontroll.data.local.dao.ProductDao
 import com.example.freshcontroll.data.local.dao.SaleDao
 import com.example.freshcontroll.data.local.entity.SaleEntity
 import com.example.freshcontroll.data.mapper.toDomain
@@ -22,6 +23,7 @@ import javax.inject.Inject
 
 class SaleRepositoryImpl @Inject constructor(
     private val saleDao: SaleDao,
+    private val productDao: ProductDao,
     private val firestoreService: FirestoreService,
     private val authRepository: AuthRepository,
     private val auditRepository: AuditRepository
@@ -83,7 +85,7 @@ class SaleRepositoryImpl @Inject constructor(
     }
 
     override suspend fun registerSale(sale: Sale, details: List<SaleDetail>): Result<Unit> = runCatching {
-        // 1. Guardar atómicamente en Room
+        // 1. Guardar atómicamente en Room (Sin descontar stock todavía)
         saleDao.insertSale(sale.toEntity(isSynced = false))
         saleDao.insertSaleDetails(details.map { it.toEntity() })
 
@@ -113,8 +115,25 @@ class SaleRepositoryImpl @Inject constructor(
                 "unitPrice" to detail.unitPrice,
                 "totalPrice" to detail.totalPrice
             )
-            // Se guardan de manera silenciosa si hay errores temporales
             runCatching { firestoreService.saveDocument("sale_details", detail.id, detailMap) }
+        }
+    }
+
+    /**
+     * Nuevo método para confirmar la venta y aplicar el descuento de stock final.
+     */
+    override suspend fun finalizeAndDeductStock(saleId: String): Result<Unit> = runCatching {
+        val saleData = getSaleWithDetails(saleId) ?: throw Exception("Venta no encontrada")
+        val (_, details) = saleData
+
+        details.forEach { detail ->
+            val product = productDao.getProductById(detail.productId).firstOrNull()
+            if (product != null) {
+                val newStock = product.currentStock - detail.quantity
+                productDao.updateStock(product.id, newStock)
+                firestoreService.updateDocument("products", product.id,
+                    mapOf("currentStock" to newStock))
+            }
         }
     }
 
@@ -132,6 +151,18 @@ class SaleRepositoryImpl @Inject constructor(
         // 1. Borrar en Local
         saleDao.deleteSaleById(saleId)
         saleDao.deleteSaleDetailsBySaleId(saleId)
+
+        // ⚡ RESTAURACIÓN DE STOCK: Devolver existencias si se anula la venta ⚡
+        saleData?.second?.forEach { detail ->
+            runCatching {
+                val product = productDao.getProductById(detail.productId).firstOrNull()
+                if (product != null) {
+                    val restoredStock = product.currentStock + detail.quantity
+                    productDao.updateStock(product.id, restoredStock)
+                    firestoreService.updateDocument("products", product.id, mapOf("currentStock" to restoredStock))
+                }
+            }
+        }
 
         // 2. Borrar en Firestore
         runCatching { firestoreService.deleteDocument("sales", saleId) }

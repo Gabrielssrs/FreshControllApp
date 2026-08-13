@@ -23,4 +23,6 @@ interface SaleRepository {
     suspend fun deleteSale(saleId: String): Result<Unit>
 
     suspend fun syncSales(storeId: String): Result<Unit>
+
+    suspend fun finalizeAndDeductStock(saleId: String): Result<Unit>
 }

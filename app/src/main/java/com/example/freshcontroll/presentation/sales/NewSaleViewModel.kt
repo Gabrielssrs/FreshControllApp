@@ -8,13 +8,17 @@ import com.example.freshcontroll.domain.repository.AuthRepository
 import com.example.freshcontroll.domain.usecase.sales.AddProductToCartUseCase
 import com.example.freshcontroll.domain.usecase.sales.ProcessSaleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import com.example.freshcontroll.domain.usecase.inventory.GetProductsUseCase
+import com.example.freshcontroll.presentation.sales.model.CartItemUiModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import com.example.freshcontroll.domain.usecase.inventory.GetProductsUseCase
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
+import java.util.Calendar
 import javax.inject.Inject
 
 /**
@@ -35,12 +39,23 @@ class NewSaleViewModel @Inject constructor(
     private val _availableProducts = MutableStateFlow<List<Product>>(emptyList())
     val availableProducts: StateFlow<List<Product>> = _availableProducts.asStateFlow()
 
+    // Exponemos modelos UI que contienen la validación de stock para cada item del carrito
+    val cartUiModels: StateFlow<List<CartItemUiModel>> = combine(_currentCart, _availableProducts) { cart, products ->
+        cart.map { detail ->
+            val product = products.find { it.id == detail.productId }
+            CartItemUiModel(detail, product?.currentStock ?: 0.0)
+        }
+    }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
     // Triple(Subtotal, Taxes, Total)
     private val _saleTotals = MutableStateFlow(Triple(0.0, 0.0, 0.0))
     val saleTotals: StateFlow<Triple<Double, Double, Double>> = _saleTotals.asStateFlow()
 
     private val _saleCompletedEvent = MutableStateFlow<String?>(null)
     val saleCompletedEvent: StateFlow<String?> = _saleCompletedEvent.asStateFlow()
+
+    private val _errorEvent = MutableStateFlow<String?>(null)
+    val errorEvent: StateFlow<String?> = _errorEvent.asStateFlow()
 
     init {
         loadAvailableProducts()
@@ -49,26 +64,52 @@ class NewSaleViewModel @Inject constructor(
     private fun loadAvailableProducts() {
         viewModelScope.launch {
             val currentUser = authRepository.getCurrentUser() ?: return@launch
-            getProductsUseCase(currentUser.storeId).collect {
-                _availableProducts.value = it
+            getProductsUseCase(currentUser.storeId).collect { products ->
+                // Filtramos productos que no tengan stock para la búsqueda manual
+                _availableProducts.value = products.filter { it.currentStock > 0 }
             }
         }
     }
 
     fun addProductToCart(product: Product, quantity: Double) {
+        if (product.currentStock <= 0) {
+            _errorEvent.value = "El producto ${product.name} está agotado."
+            return
+        }
+
+        val currentItem = _currentCart.value.find { it.productId == product.id }
+        val totalRequested = (currentItem?.quantity ?: 0.0) + quantity
+
+        if (totalRequested > product.currentStock) {
+            _errorEvent.value = "Solo quedan ${product.currentStock} unidades de ${product.name}."
+            return
+        }
+
         val updatedCart = addProductToCartUseCase(_currentCart.value, product, quantity)
         _currentCart.value = updatedCart
         recalculateTotals(updatedCart)
     }
 
     fun addProductToCartByBarcode(barcode: String) {
-        val product = _availableProducts.value.find { it.barcode == barcode }
-        if (product != null) {
-            addProductToCart(product, 1.0)
+        // En el caso de código de barras, buscamos en todos los productos 
+        // (incluso los que filtramos del buscador manual por si el usuario insiste)
+        viewModelScope.launch {
+            val product = _availableProducts.value.find { it.barcode == barcode }
+            if (product != null) {
+                addProductToCart(product, 1.0)
+            } else {
+                _errorEvent.value = "Producto no encontrado o agotado."
+            }
         }
     }
 
     fun updateProductQuantity(productId: String, newQuantity: Double) {
+        val product = _availableProducts.value.find { it.id == productId }
+        if (product != null && newQuantity > product.currentStock) {
+            _errorEvent.value = "No hay suficiente stock para aumentar la cantidad."
+            return
+        }
+
         val updatedCart = _currentCart.value.map {
             if (it.productId == productId) {
                 it.copy(
@@ -100,6 +141,15 @@ class NewSaleViewModel @Inject constructor(
         viewModelScope.launch {
             val currentUser = authRepository.getCurrentUser() ?: return@launch
 
+            // Validación final de stock antes de proceder
+            for (item in _currentCart.value) {
+                val product = _availableProducts.value.find { it.id == item.productId }
+                if (product == null || item.quantity > product.currentStock) {
+                    _errorEvent.value = "Error: El producto ${item.productName} ya no tiene stock suficiente."
+                    return@launch
+                }
+            }
+
             // Generador simple de ticket (FC- + últimos 4 dígitos del timestamp actual)
             val timestampStr = System.currentTimeMillis().toString()
             val ticketNumber = "FC-${timestampStr.takeLast(4)}"
@@ -122,5 +172,9 @@ class NewSaleViewModel @Inject constructor(
 
     fun clearCompletedEvent() {
         _saleCompletedEvent.value = null
+    }
+
+    fun clearErrorEvent() {
+        _errorEvent.value = null
     }
 }

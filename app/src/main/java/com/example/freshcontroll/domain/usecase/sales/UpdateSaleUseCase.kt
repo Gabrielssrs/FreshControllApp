@@ -50,7 +50,8 @@ class UpdateSaleUseCase @Inject constructor(
             storeId = originalSale.storeId,
             eventType = AuditEventType.VENTA_EDITADA,
             title = "Venta Editada",
-            description = "El usuario ${currentUser.fullName} editó la venta ${originalSale.ticketNumber}. Total original: S/ ${originalSale.total} -> Nuevo total: S/ $newTotal",
+            description = "El usuario ${currentUser.fullName} editó la venta ${originalSale.ticketNumber}. " +
+                    "Total original: S/ ${originalSale.total} -> Nuevo total: S/ $newTotal",
             timestamp = System.currentTimeMillis(),
             userId = currentUser.id,
             userName = currentUser.fullName,

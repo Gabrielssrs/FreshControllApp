@@ -225,12 +225,18 @@ class AuthRepositoryImpl @Inject constructor(
                 role = map["role"] as String,
                 hasAccess = map["hasAccess"] as? Boolean ?: true,
                 photoUrl = map["photoUrl"] as? String,
+                fcmToken = map["fcmToken"] as? String,
                 isSynced = true
             )
         }
         if (entities.isNotEmpty()) {
             userDao.insertUsers(entities)
         }
+    }
+
+    override suspend fun updateFcmToken(userId: String, token: String?): Result<Unit> = runCatching {
+        userDao.updateFcmToken(userId, token)
+        runCatching { firestoreService.updateDocument("users", userId, mapOf("fcmToken" to token)) }
     }
 
     override fun logout() {
